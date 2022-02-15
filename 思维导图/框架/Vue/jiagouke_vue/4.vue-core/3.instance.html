@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        {{name}}
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            data() {
+                return {
+                    name: 'jw',
+                    arr: [1, 2, 3],
+                }
+            }
+        });
+        // 可以自定义挂载点 弹框组件
+        vm.$mount('#app'); // 有可能有些组件我希望不挂在到 app的节点上
+        // vm.$mount 内部会判断用户是否传入el属性，如果没有，则不会进行挂载操作
+
+        console.log(vm.$options); // 用户传入的所有属性
+        console.log(vm.$data == vm._data);
+        vm.name = 'xxx';
+        vm.$nextTick(()=>{
+            console.log(vm.$el.innerHTML); // 引用类型
+        })
+        console.log(vm.$nextTick);// 保证页面渲染完毕后获取最新的dom元素 
+        // 默认我们有渲染watcher  ，还可以用户自定义watcher
+
+        // 异步渲染 queueWatcher 会把属性 对应的watcher存放起来
+        vm.$watch('name',(newValue,oldValue)=>{
+            console.log(newValue);
+        })
+        vm.name = '1';
+        vm.name = '2';
+        vm.name = 3;
+
+        // $watch $nextTick $mount
+        // vm.$data vm.$el vm.$options
+    </script>
+</body>
+
+</html>

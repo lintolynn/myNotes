@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div v-click-outside="blur">
+            <input type="text" @focus="focus">
+            <div v-show="visible">面板 <button>点我啊</button></div>
+        </div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 指令 的目的就是dom操作
+        let vm = new Vue({
+            el: '#app',
+            directives:{
+                clickOutside:{ // 函数写法bind + update
+                    bind(el,bindings,vnode){
+                        el.handler = (e)=>{
+                            if(!el.contains(e.target)){
+                                let method = bindings.expression;
+                                vnode.context[method]()
+                            }
+                        }
+                        document.addEventListener('click',el.handler)
+                    },
+                    unbind(el){
+                        document.removeEventListener('click',el.handler)
+                    }
+                    // bind(el,bindings,vnode,oldVnode){
+                    //    console.log(el.parentNode); 
+                    // },
+                    // inserted(el,bindings,vnode,oldVnode){
+                    //     console.log(el.parentNode); 
+                    // },
+                    // update(el,bindings,vnode,oldVnode){
+                    //     console.log(el.innerHTML); 
+                    // },
+                    // componentUpdated(el,bindings,vnode,oldVnode){
+                    //     console.log(el.innerHTML); 
+                    // },
+                    // unbind(){
+                    //     // 解除事件绑定
+                    // }
+                }
+            },
+            data() {
+                return {visible:false,my:'ok'}
+            },
+            methods: { // 内部会绑定this 永远指向的都是当前实例
+                focus() { // 指代的是实例
+                    this.visible = true;
+                },
+                blur(){
+                    this.visible = false  
+                }
+            }
+        })
+        vm.my = 'no ok'
+    </script>
+</body>
+
+</html>

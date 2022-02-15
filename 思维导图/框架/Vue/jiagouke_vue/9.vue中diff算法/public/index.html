@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <my></my> -->
+    <div id="app">
+        <my></my>
+        <my></my> <span>我是常规p name:::::::::{{name}}</span>
+    </div> <!-- <script src="/node_modules/vue/dist/vue.js"></script> -->
+    <script src="/node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('my', {
+            template: `<div>hello age:::{{age}}<Cmp1></Cmp1><Cmp1></Cmp1></div>`,
+            data: () => {
+                return {
+                    age: 18
+                }
+            },
+            mounted() {
+                setTimeout(() => this.age = 25, 3000)
+            },
+            components: {
+                Cmp1: {
+                    template: `<p>我是Cmp1</p>`
+                }
+            }
+        })
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    name: '小明'
+                }
+            },
+        })
+
+        console.log(vm)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 静态节点，稍后渲染时 不会重新的渲染有缓存了 -->
+        <div v-once>{{name}}</div>
+        <!-- 指令对应的值都是变量 innerHTML (会转化成标签插入) xss攻击 -->
+        <!-- 这里需要对内容严格把控，不要信任用户输入的内容 -->
+        <div v-html="html"></div>
+
+        <!-- v-if / v-else v-else-if  = 三元表达式-->
+       
+        <!-- 最终会被编译成 render函数  如果条件不满足这个节点就不渲染 操作的是dom元素-->
+        <!-- v-if 可以配合template一起使用 -->
+        <template v-if="true">
+            <div>hello</div>
+            <div>hello</div>
+        </template>
+        <div v-else> world</div>
+
+        <!-- v-show 指令  最终会通过样式来控制这个div是显示还是隐藏
+            display:none opacity visibility:hidden
+        -->
+        <div v-show="false">hello</div>
+
+        <!-- 
+            v-for 循环 循环字符串 （数租） （数字) 对象
+         -->
+         <!-- (每一项，索引) -->
+
+         <!-- 如果使用v-for 就不要在和v-if连用 -->
+         <!-- v-for 和 if优先级问题  先循环 在判断 ，尽量使用计算属性来解决这个问题-->
+         <div v-for="(a,index) of arr" :key="index" v-if="a%2 === 0">
+            {{a}}
+         </div>
+
+         <!-- key的问题  尽量不要使用索引作为key （尤其是经常操作的列表） -->
+
+         <!-- 用索引 会导致 苹果=》香蕉   香蕉=》苹果 -->
+         <li key="0">苹果</li>
+         <li key="1">橘子</li>
+         <li key="2">香蕉</li>
+
+         <li key="0">香蕉</li>
+         <li key="1">橘子</li>
+         <li key="2">苹果</li>
+
+         <!-- key的作用 -->
+       
+         <li key="x">香蕉</li>
+         <li key="j">橘子</li>
+         <li key="p">苹果</li>
+
+         <li key="x">香蕉</li>
+         <li key="j">橘子</li>
+         <li key="p">苹果</li>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data() {
+                return {
+                    name: 'jw',
+                    arr: [1, 2, 3],
+                    html:'<h1>hello</h1>',
+                    arr:[1,2,3]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

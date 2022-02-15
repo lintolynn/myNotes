@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head> 
+<body>
+    <!-- watcher 和 dep的关系  一个watcher  对应 n个dep  一个dep 对应对个watcher -->
+    <div id="app" style="color: red;background:blue">
+        {{arr}}
+    </div>
+    <!-- Object.freeze 冻结 内部就不能增加get和set -->
+    <script src="/dist/umd/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    arr: [
+                        [
+                            [1, 2, 3]
+                        ]
+                    ],
+                    aaa: {
+                        aaa: {
+                            aa: 1
+                        }
+                    }
+                }
+            }
+        })
+        vm.arr.push(1);
+        vm.arr.push(2);
+        vm.arr.push(3);
+        vm.arr.push(4);
+        // 希望数据变化可以自动的重新执行我们的渲染watcher 
+        vm.$nextTick(() => {
+            console.log(vm.$el.innerHTML)
+        })
+    </script>
+</body>
+
+</html>

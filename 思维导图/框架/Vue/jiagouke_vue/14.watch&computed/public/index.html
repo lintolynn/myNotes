@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"> {{allName}} </div>
+    <script src="/dist/umd/vue.js"></script>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data() {
+                return { name: 'zf', age: 10 }
+            },
+            computed: {
+                // watch在内部会对变量取值，computed默认是不会的
+                // computed依赖的值不变 就不会重新执行
+                // computed变量可以用于模板的渲染
+                allName: {
+                    get(){
+                        return this.name + '-' + this.age
+                    },
+                    set(newValue){
+                        console.log(newValue)
+                    }
+                }
+            }
+        })
+        // 默认在执行时 会让name和age的dep属性记录当前计算属性watcher
+        // 如果name发生变化 会调用计算属性watcher去执行 -》dirty变为true
+
+        // name和age 应该记录除了计算属性之外还应该记录当前的渲染watcher，属性变化后重新取值还要重新渲染
+        console.log(vm.allName)
+        console.log(vm.allName)
+        setTimeout(() => {
+            vm.name = 'jw';
+            console.log(vm.allName)
+            vm.allName = 'xxx'
+        }, 1000);
+
+        // 1.如果监控的key 对应的值是对象是无法获取老状态
+        // 2.watch一个属性 可以注册多个监听器
+        // 3.可以写成handler的格式 监听method中的方法，和参数传递
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- 模板语法 会在当前的vue实例上进行取值 _v() -->
+    <!-- 表达式只能存放 有返回值的结果 -->
+
+    <!-- 可以运算 函数执行获取返回值 三元表达式 取值 -->
+    <div id="app">
+        {{ name.n }}  {{arr}}
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    name: Object.freeze({
+                        n: 'jw',
+                    }),
+                    arr: [1, 2, 3]
+                }
+            },
+        });
+        vm.name.n = 1000;
+        // 1.不存在的属性 如果新增的话不能渲染视图 内部会采用defineProperty重新定义属性 getter 和 setter
+        // vm.name = {   可以出发更新
+        //     ...vm.name,
+        //     a:1
+        // }
+        // 内部也会触发更新 而且新增的a 属性是可以响应式的
+        // vm.$set(vm.name,'a',1)
+        // vm.name.a = 100;
+        // 数据尽量少些嵌套关系
+
+
+        //2.数组只能通过改变数组的七个方法来实现更新视图 ，不能使用索引 长度
+        // vm.arr.push(456);
+        // vm.$set(vm.arr,0,100); // 内部会采用splice
+        // vm.$delete
+        // vue3.0使用了proxy 来实现代理，不需要一上来就进行递归(性能好 但是兼容性差)
+    </script>
+</body>
+
+</html>

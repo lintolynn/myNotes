@@ -1,0 +1,19 @@
+{
+  "name": "10.unit",
+  "version": "1.0.0",
+  "main": "1.parser.test.js",
+  "scripts": {
+    "test": "jest --coverage --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/preset-env": "^7.9.6",
+    "@types/jest": "^25.2.1",
+    "axios": "^0.19.2",
+    "jest": "^26.0.1"
+  },
+  "devDependencies": {},
+  "description": ""
+}

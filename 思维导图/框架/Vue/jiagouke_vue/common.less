@@ -1,0 +1,281 @@
+@import "./variables.less";
+
+html,
+body {
+  /* ios 弹性滚动 */
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+
+body {
+  background: #F5F5F5;
+  user-select: none;
+  color: @font-color;
+}
+
+img {
+  max-width: 100%;
+}
+
+ol {
+  margin-left: 30px;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  opacity: 0;
+}
+
+// 竖彩色小图标
+.title-icon {
+  font-size: 30px;
+  color: #909090;
+  display: inline-block;
+  width: 6px;
+  height: 30px;
+  margin-right: 30px;
+  vertical-align: text-bottom;
+  background: linear-gradient(to bottom, #ffc983, #ff984c);
+}
+
+// 业主信息卡
+.person-info,
+.company-info,
+.communication-info,
+.concat-info,
+.family-info,
+.car-info {
+  .icon {
+    color: #F39800;
+  }
+
+  .info-section {
+    margin-top: 20px;
+    background: #fff;
+
+    .cell {
+      height: 100px;
+      display: flex;
+      padding: 0 30px;
+      font-size: 32px;
+      /*px*/
+      align-items: center;
+      color: #606060;
+      .border-bottom-1px();
+
+      >div {
+        height: 100px;
+        display: flex;
+        align-items: center;
+      }
+
+      .cell-title {
+        width: 35%;
+      }
+
+      .cell-value {
+        flex: 1;
+        justify-content: space-between;
+
+        // >span{color: #606060;}
+        &.cell-value-empty {
+          color: #A0A0A0;
+        }
+
+        .iconfont {
+          color: #D2D2D7;
+        }
+
+        span:first-child {
+          padding-left: 4px;
+        }
+
+        input {
+          height: 100%;
+          width: 100%;
+          border: none;
+          font-size: 32px;
+          /*px*/
+        }
+      }
+
+      input {
+        color: #606060;
+        align-self: center;
+      }
+
+      &.cell__disable {
+        color: #A0A0A0;
+      }
+
+      input::-webkit-input-placeholder {
+        padding-left: 4px;
+      }
+
+      /* 使用webkit内核的浏览器 */
+      input:-moz-placeholder {
+        padding-left: 4px;
+      }
+
+      /* Firefox版本4-18 */
+      input::-moz-placeholder {
+        padding-left: 4px;
+      }
+
+      /* Firefox版本19+ */
+      input:-ms-input-placeholder {
+        padding-left: 4px;
+      }
+    }
+
+    .cell-value-empty {
+      color: #A0A0A0;
+    }
+
+    .cell-textarea {
+      display: flex;
+      padding: 0 30px;
+      width: 100%;
+      flex-wrap: nowrap;
+      align-items: center;
+      border-bottom: 1px solid #f2f2f2;
+      font-size: 32px;
+
+      /*px*/
+      >span {
+        width: 35%;
+      }
+
+      .textarea-info {
+        flex: 1;
+        justify-self: flex-start;
+        color: #606060;
+        padding: 25.5px 0 0 0;
+        resize: none;
+        outline: 0 none;
+        border: none;
+        font-family: sans-serif;
+        font-size: 32px;
+        /*px*/
+      }
+    }
+
+    .textareaMax {
+      min-height: 220px
+    }
+
+    .textareaMiddle {
+      min-height: 70px;
+    }
+
+    .cell-textarea .textareaMiddle {
+      min-height: 70px;
+      padding: 25px 0;
+    }
+
+    .delete {
+      height: 100px;
+      color: #EB544D;
+      line-height: 100px;
+      text-align: center;
+      font-size: 32px;
+    }
+  }
+
+  .section-add {
+    background: #fff;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    span {
+      font-size: 32px;
+      /*px*/
+      color: #BBBBBB;
+    }
+  }
+
+  .section-footer {
+    padding: 40px 28px;
+
+    .tip {
+      color: #A0A0A0;
+      font-size: 28px;
+      /*px*/
+      margin-bottom: 40px;
+    }
+  }
+}
+
+/* row 布局 */
+.x-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.x-wrap {
+  flex-wrap: wrap;
+}
+
+/* column 布局 */
+.x-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.x-grow {
+  flex-grow: 1;
+}
+
+/* flex 布局 */
+.x-flex {
+  flex: 1 1 auto;
+}
+
+/* 锁定尺寸 */
+.x-lock {
+  flex: 0 0 auto;
+}
+
+/* 剧中布局 */
+.x-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
