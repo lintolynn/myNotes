@@ -1,10 +1,10 @@
-import {initState} from './state'
+import { initState } from './state'
 
-import {compileToFunction} from './compiler/index.js'
+import { compileToFunction } from './compiler/index.js'
 
-import {mountComponent} from './lifecycle'
+import { mountComponent } from './lifecycle'
 // 在原型上添加一个init方法
-export function initMixin(Vue){
+export function initMixin(Vue) {
     // 初始化流程
     Vue.prototype._init = function (options) {
         // 数据的劫持
@@ -17,19 +17,19 @@ export function initMixin(Vue){
         // 如果用户传入了el属性 需要将页面渲染出来
         // 如果用户传入了el 就要实现挂载流程
 
-        if(vm.$options.el){
+        if (vm.$options.el) {
             vm.$mount(vm.$options.el);
         }
     }
     Vue.prototype.$mount = function (el) {
         const vm = this;
         const options = vm.$options;
-        el = document.querySelector(el); 
+        el = document.querySelector(el);
         // 默认先会查找有没有render方法，没有render 会 采用template template也没有就用el中的内容
-        if(!options.render){
+        if (!options.render) {
             // 对模板进行编译
             let template = options.template; // 取出模板
-            if(!template && el){
+            if (!template && el) {
                 template = el.outerHTML;
             }
             const render = compileToFunction(template);
@@ -37,8 +37,8 @@ export function initMixin(Vue){
             // 我们需要将template 转化成render方法 vue1.0 2.0虚拟dom 
             console.log(render);
         }
-        
+
         // 渲染当前的组件 挂载这个组件
-        mountComponent(vm,el);
+        mountComponent(vm, el);
     }
 }
