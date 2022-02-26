@@ -23,27 +23,27 @@ function createASTElement(tagName, attrs) {
 }
 function start(tagName, attrs) {
     // 遇到开始标签 就创建一个ast元素s
-    let element = createASTElement(tagName,attrs);
-    if(!root){
+    let element = createASTElement(tagName, attrs);
+    if (!root) {
         root = element;
     }
     currentParent = element; // 把当前元素标记成父ast树
     stack.push(element); // 将开始标签存放到栈中
 }
 function chars(text) {
-    text = text.replace(/\s/g,'');
-    if(text){
+    text = text.replace(/\s/g, '');
+    if (text) {
         currentParent.children.push({
             text,
-            type:TEXT_TYPE
+            type: TEXT_TYPE
         })
     }
 }
 function end(tagName) {
     let element = stack.pop(); // 拿到的是ast对象
     // 我要标识当前这个p是属于这个div的儿子的
-    currentParent = stack[stack.length-1];
-    if(currentParent){
+    currentParent = stack[stack.length - 1];
+    if (currentParent) {
         element.parent = currentParent;
         currentParent.children.push(element); // 实现了一个树的父子关系
     }
