@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lazy-Load</title>
+    <style>
+        .img {
+            width: 200px;
+            height: 200px;
+            background-color: gray;
+        }
+
+        .pic {
+            /*必要的img样式*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner.gif">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner.jpg">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner.png">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner_back.jpg">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner2.png">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner3.jpg">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner3.png">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner4.jpg">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/banner5.png">
+    </div>
+    <div class="img">
+        <img class="pic" alt="加载中" data-src="imgs/bg.jpg">
+    </div>
+</div>
+<script>
+  // 获取所有的图片标签
+  const imgs = document.getElementsByTagName('img')
+  // 获取图片总数
+  const total = imgs.length
+  // 获取可视区域的高度
+  const viewHeight = window.innerHeight || document.documentElement.clientHeight
+  // num用于统计当前显示到了哪一张图片，避免每次都从第一张图片开始检查是否露出
+  let num = 0
+
+  function lazyLoad() {
+    for (let i = num; i < total; i++) {
+      const item = imgs[i]
+      // 用可视区域高度减去元素顶部距离可视区域顶部的高度
+      let distance = viewHeight - item.getBoundingClientRect().top
+      // 如果可视区域高度大于等于元素顶部距离可视区域顶部的高度，说明元素露出
+      if (distance >= 0) {
+        // 给元素写入真实的src，展示图片
+        item.src = item.getAttribute('data-src')
+        // 前i张图片已经加载完毕，下次从第i+1张开始检查是否露出
+        num = i + 1
+      }
+    }
+  }
+  lazyLoad()
+  // 监听Scroll事件
+  window.addEventListener('scroll', lazyLoad, false)
+</script>
+</body>
+</html>

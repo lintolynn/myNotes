@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  function debounce(fn, delay) {
+    // fn是我们需要包装的事件回调, delay是每次推迟执行的等待时间
+    // 定时器
+    let timer = null
+    // 将debounce处理结果当作函数返回
+    return function() {
+      // 保留调用时的this上下文，调用时传入的参数
+      const that = this,
+        args = arguments
+      // 每次事件被触发时，都去清除之前的旧定时器
+      if (timer) {
+        clearTimeout(timer)
+      }
+      // 设立新定时器
+      timer = setTimeout(() => {
+        fn.apply(that, args)
+      }, delay)
+    }
+  }
+
+  // test
+  window.addEventListener('resize', debounce(() => {
+    console.log('最后一次才触发')
+  }, 1000))
+
+</script>
+</body>
+</html>

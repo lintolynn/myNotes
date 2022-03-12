@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    function throttle(fn, delay) {
+      // fn是我们需要包装的事件回调, delay是时间间隔的阈值
+      // timer是定时器，last为上一次触发回调的时间
+      let timer = null,
+        last = '';
+      return function() {
+        // 保留调用时的this上下文，保留调用时传入的参数，记录本次触发回调的时间
+        const that = this,
+          args = arguments,
+          now = +new Date();
+
+        // 如果上次触发的时间和本次触发的时间差，时间间隔大于我们设定的时间间隔阈值，
+        // 则执行回调,无论如何要反馈给用户一次响应
+        if (now - last >= delay) {
+          last = now
+          fn.apply(that, args)
+          return
+        }
+        // 以上都一样
+        // 如果时间间隔小于我们设定的时间间隔阈值，则为本次触发操作设立一个新的定时器
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          last = now
+          fn.apply(that, args)
+        }, delay)
+      }
+    }
+
+    // test
+    let num = 0
+    window.addEventListener('resize', throttle(() => {
+      console.log('触发' + ++num)
+    }, 500))
+</script>
+</body>
+</html>

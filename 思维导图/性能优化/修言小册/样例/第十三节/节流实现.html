@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>节流的实现</title>
+</head>
+<body>
+<script>
+  function throttle1(fn, timer) {
+    // 上次触发的回调时间
+    let lastTime = 0
+    // 将throttle处理结果当作函数返回
+    return function() {
+      // 保留调用时的this上下文，调用时传入的参数，本次触发回调的时间
+      const that = this,
+        args = arguments,
+        now = +new Date();
+      // 判断上次触发的时间和本次触发的时间差，是否大于时间间隔的阈值
+      if (now - lastTime >= timer) {
+        // 记录上一次的时间
+        lastTime = now
+        // 如果时间间隔大于我们设定的时间间隔阈值，则执行回调
+        // fn.call(that, ...args)
+        fn.apply(that, args)
+      }
+    }
+  }
+
+  window.addEventListener('resize', throttle1(() => {
+    console.log('触发了')
+  }, 1000))
+
+</script>
+</body>
+</html>
