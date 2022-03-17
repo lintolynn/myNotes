@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单工厂模式</title>
+</head>
+<body>
+<script>
+  function User(name , age, career, work) {
+    this.name = name
+    this.age = age
+    this.career = career
+    this.work = work
+  }
+
+  function Factory(name, age, career) {
+    let work
+    switch (career) {
+      case 'coder':
+        work =  ['写代码','写系分', '修Bug']
+        break
+      case 'product manager':
+        work = ['订会议室', '写PRD', '催更']
+        break
+      case 'boss':
+        work = ['喝茶', '看报', '见客户']
+        break
+      // case 'xxx':
+    }
+    return new User(name, age, career, work)
+  }
+</script>
+</body>
+</html>

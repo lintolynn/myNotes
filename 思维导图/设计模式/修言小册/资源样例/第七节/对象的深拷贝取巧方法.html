@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  const liLei = {
+    name: 'lilei',
+    age: 28,
+    habits: ['coding', 'hiking', 'running']
+  }
+  const liLeiStr = JSON.stringify(liLei)
+  const liLeiCopy = JSON.parse(liLeiStr)
+  liLeiCopy.habits.splice(0, 1)
+
+  console.log('李雷副本的habits数组是', liLeiCopy.habits) //  ['hiking', 'running']
+  console.log('李雷的habits数组是',  liLei.habits) // ['coding', 'hiking', 'running']
+</script>
+</body>
+</html>

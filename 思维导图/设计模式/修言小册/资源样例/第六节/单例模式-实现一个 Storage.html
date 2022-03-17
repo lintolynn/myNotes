@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    /*
+    *  实现Storage，使得该对象为单例，基于 localStorage 进行封装。
+    *  实现方法 setItem(key,value) 和 getItem(key)。
+    * */
+
+    // 静态方法版
+    class Storage {
+      static getInstance() {
+        // 判断是否已经new过1个实例
+        if (!Storage.instance) {
+          // 若这个唯一的实例不存在，那么先创建它
+          Storage.instance = new Storage()
+        }
+        // 如果这个唯一的实例已经存在，则直接返回
+        return Storage.instance
+      }
+      setItem(key, value) {
+        if (!key || !value) {
+          return
+        }
+        return localStorage.setItem(key, value)
+      }
+      getItem(key) {
+        if (!key) {
+          return
+        }
+        return localStorage.getItem(key)
+      }
+    }
+
+    // 测试
+    let t1 = Storage.getInstance()
+    let t2 = Storage.getInstance()
+    console.log(t1 === t2)
+
+    t1.setItem('base', '45k')
+    let getBase = t2.getItem('base')
+    console.log(getBase)
+
+    // 方法二：闭包版
+    // 先实现一个基础的StorageBase类，把getItem和setItem方法放在它的原型链上
+    function StorageBase() {}
+    StorageBase.prototype.setItem = function(key, value) {
+      if (!key || !value) {
+        return
+      }
+      return localStorage.setItem(key, value)
+    }
+
+    StorageBase.prototype.getItem = function(key) {
+      if (!key) {
+        return
+      }
+      return localStorage.getItem(key)
+    }
+
+    // 以闭包的形式创建一个引用自由变量的构造函数
+    const StorageClass = (function() {
+      let instance = null
+      return function() {
+        // 判断自由变量是否为null
+        if (!instance) {
+          // 如果为null则new出唯一实例
+          instance = new StorageBase
+        }
+        return instance
+      }
+    })()
+
+    // 测试
+    let p1 = new StorageClass()
+    let p2 = new StorageClass()
+    console.log(p1 === p2)
+
+    p1.setItem('yearBase', '80w')
+    let p2Base = p2.getItem('yearBase')
+    console.log(p2Base)
+
+</script>
+</body>
+</html>

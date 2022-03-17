@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  // 方法一
+  function deepClone(obj) {
+    if (obj == null || typeof obj !== 'object') {
+      return obj
+    }
+
+    let result = null
+    if (obj instanceof Array) {
+      result = []
+    } else {
+      result = {}
+    }
+
+    Object.keys(obj).forEach(item => {
+      if (typeof obj[item] === 'object') {
+        result[item] = deepClone(obj[item])
+        return
+      }
+      return result[item] = obj[item]
+    })
+    return result
+  }
+
+  // 方法二
+  function deepClone2(obj) {
+    if (obj == null || typeof obj !== 'object') {
+      return obj
+    }
+
+    let result = {}
+    if (obj instanceof Array) {
+      result = []
+    }
+
+    for (let i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        result[i] = deepClone2(obj[i])
+      }
+    }
+
+    return result
+  }
+
+  const liLei = {
+    name: 'lilei',
+    age: 28,
+    habits: ['coding', 'hiking', 'running'],
+    city: {
+      form: '北京'
+    }
+  }
+
+  // test
+  const t1 = deepClone(liLei)
+  console.log({...t1})
+
+  const t2 = deepClone2(liLei)
+  console.log({...t2})
+
+  liLei.city.form = '上海'
+  liLei.habits.reverse()
+  console.log({...liLei})
+</script>
+</body>
+</html>

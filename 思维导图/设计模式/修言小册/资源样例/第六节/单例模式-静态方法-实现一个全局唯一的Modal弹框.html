@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #model {
+            height: 200px;
+            width: 200px;
+            line-height: 200px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<button id='open'>打开弹框</button>
+<button id='close'>关闭弹框</button>
+<script>
+    class Model {
+      static getInstance() {
+        if (!Model.instance) {
+          Model.instance = document.createElement('div')
+          Model.instance.innerHTML = '我是一个全局唯一的Modal'
+          Model.instance.id = 'model'
+          Model.instance.style.display = 'none'
+          document.body.appendChild(Model.instance)
+        }
+        return Model.instance
+      }
+    }
+
+    const open = document.getElementById('open')
+    const close = document.getElementById('close')
+
+    // 点击打开按钮展示模态框
+    open.addEventListener('click', function() {
+      // 未点击则不创建modal实例，避免不必要的内存占用;
+      const model = Model.getInstance()
+      model.style.display = 'block'
+    })
+
+    // 点击关闭按钮隐藏模态框
+    close.addEventListener('click', function() {
+      const model = Model.getInstance()
+      if (!model) {
+        return
+      }
+      model.style.display = 'none'
+    })
+</script>
+</body>
+</html>
