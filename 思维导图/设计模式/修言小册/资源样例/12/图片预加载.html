@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<img src="" alt="" id="testImg">
+<script>
+  // 不好的
+  // 违反了我们设计原则中的单一职责原则,
+  // 不仅要负责图片的加载，还要负责 DOM 层面的操作
+  // 这样一来，就出现了两个可能导致这个类发生变化的原因
+  class PreLoadImage {
+    // 站位图的url地址
+    static LOADING_URL = './img/bgse.png'
+
+    constructor(imgNode) {
+      // 获取该实例对应的DOM节点
+      this.imgNode = imgNode
+    }
+
+    // 该方法用于设置真实的图片地址
+    setSrc(targetUrl) {
+      // img节点初始化时展示的是一个占位图
+      this.imgNode.src = PreLoadImage.LOADING_URL
+      // 创建一个帮我们加载图片的Image实例
+      const image = new Image()
+      // 监听目标图片加载的情况，完成时再将DOM上的img节点的src属性设置为目标图片的url
+      image.onload = () => {
+        this.imgNode.src = targetUrl
+      }
+      // 设置src属性，Image实例开始加载图片
+      image.src = targetUrl
+    }
+  }
+
+  // 好的封装
+  class PreLoadImageGood {
+    constructor(imgNode) {
+      // 获取真实的DOM节点
+      this.imgNode = imgNode
+    }
+
+    // 操作img节点的src属性
+    setSrc(imgUrl) {
+      this.imgNode.src = imgUrl
+    }
+  }
+
+  // 我们可以通过 ProxyImage 这个代理，实现对真实 img 节点的间接访问，并得到我们想要的效果
+  class ProxyImage {
+    // 占位图的url地址
+    static LOADING_URL = './img/bgse.png'
+
+    constructor(targetImage) {
+      // 目标Image，即PreLoadImage实例
+      this.targetImage = targetImage
+    }
+
+    // 该方法主要操作虚拟Image，完成加载
+    setSrc(targetUrl) {
+      // 真实img节点初始化时展示的是一个占位图
+      this.targetImage.setSrc(ProxyImage.LOADING_URL)
+      // 创建一个帮我们加载图片的虚拟Image实例
+      const virtualImage = new Image()
+      // 监听目标图片加载的情况，完成时再将DOM上的真实img节点的src属性设置为目标图片的url
+      virtualImage.onload = () => {
+        this.targetImage.setSrc(targetUrl)
+      }
+      // 设置src属性，虚拟Image实例开始加载图片
+      virtualImage.src = targetUrl
+    }
+  }
+
+  let testImg = document.getElementById('testImg')
+  let preImg = new PreLoadImageGood(testImg)
+  let proxyImg = new ProxyImage(preImg)
+  proxyImg.setSrc('./img/bg.jpg')
+  console.log(preImg)
+  console.log(proxyImg)
+</script>
+</body>
+</html>
