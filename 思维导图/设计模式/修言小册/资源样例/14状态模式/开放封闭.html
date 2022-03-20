@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    const stateToProcessor = {
+        american() {
+            console.log('我只吐黑咖啡');
+        },
+        latte() {
+            this.american();
+            console.log('加点奶');
+        },
+        vanillaLatte() {
+            this.latte();
+            console.log('再加香草糖浆');
+        },
+        mocha() {
+            this.latte();
+            console.log('再加巧克力');
+        }
+    }
+
+    class CoffeeMaker {
+        constructor() {
+            /**
+             这里略去咖啡机中与咖啡状态切换无关的一些初始化逻辑
+             **/
+            // 初始化状态，没有切换任何咖啡模式
+            this.state = 'init';
+        }
+
+        // 关注咖啡机状态切换函数
+        changeState(state) {
+            // 记录当前状态
+            this.state = state;
+            // 若状态不存在，则返回
+            if (!stateToProcessor[state]) {
+                return
+            }
+            stateToProcessor[state]()
+        }
+    }
+
+    const mk = new CoffeeMaker();
+    mk.changeState('latte'); // 我只吐黑咖啡 加点奶
+</script>
+</body>
+</html>
