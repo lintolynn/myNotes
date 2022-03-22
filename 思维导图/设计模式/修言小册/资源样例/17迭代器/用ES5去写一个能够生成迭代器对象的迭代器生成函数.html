@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  // 定义生成器函数，入参是任意集合
+  function iteratorGenerator(list) {
+    // idx记录当前访问的索引
+    let idx = 0
+    // len记录传入集合的长度
+    let len = list.length
+    return {
+      // 自定义next方法
+      next: function() {
+        // 如果索引还没有超出集合长度，done为false
+        let done = idx >= len
+        // 如果done为false，则可以继续取值
+        let value = !done ? list[idx++] : undefined
+        // 将当前值与遍历是否完毕（done）返回
+        return {
+          done,
+          value
+        }
+      }
+    }
+  }
+
+  const iterator = iteratorGenerator([
+    '1号选手',
+    '2号选手',
+    '3号选手'
+  ])
+  let t1 = iterator.next()
+  let t2 = iterator.next()
+  let t3 = iterator.next()
+  let t4 = iterator.next()
+  console.log(iterator)
+  console.log(t1)
+  console.log(t2)
+  console.log(t3)
+  console.log(t4)
+</script>
+</body>
+</html>
