@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  /*
+  *  给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+  * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+  * 示例 1:
+  * 输入: [3,2,1,5,6,4] 和 k = 2
+  * 输出: 5
+  *
+  * 示例 2:
+  * 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+  * 输出: 4
+  * */
+
+  // 方法一
+  function find1(nums, k) {
+    nums.sort((a, b) => b - a).slice(0, k)
+    return nums[k - 1]
+  }
+
+  // test
+  // let t11 = find1([3, 2, 1, 5, 6, 4], 2)
+  // let t12 = find1([3, 2, 3, 1, 2, 4, 5, 5, 6], 4)
+  // console.log(t11)
+  // console.log(t12)
+
+  // 方法二
+  function find2(nums, k) {
+    let other = nums.length - k
+    let start = 0,
+      end = nums.length - 1
+    while (start < end) {
+      let p = partition(nums, start, end)
+      if (p === other) {
+        return nums[p]
+      } else if (p < other) {
+        start = p + 1
+      } else {
+        end = p - 1
+      }
+    }
+    return nums[start]
+  }
+
+  function partition(nums, start, end) {
+    let pivot = nums[start]
+    while(start < end) {
+      while(nums[end] >= pivot && start < end) {
+        end--
+      }
+      nums[start] = nums[end]
+      while (nums[start] < pivot && start < end) {
+        start++
+      }
+      nums[end] = nums[start]
+    }
+    nums[start] = pivot
+    return start
+  }
+
+  let t21 = find2([3, 2, 1, 5, 6, 4], 2)
+  let t22 = find2([3, 2, 3, 1, 2, 4, 5, 5, 6], 4)
+  console.log(t21)
+  console.log(t22)
+</script>
+</body>
+</html>

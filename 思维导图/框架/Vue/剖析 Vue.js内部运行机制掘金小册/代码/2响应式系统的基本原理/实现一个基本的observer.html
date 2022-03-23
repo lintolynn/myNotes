@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  // 更新视图
+  function cb(val) {
+    //渲染视图
+    console.log('视图更新啦')
+  }
+
+  // 实现响应式
+  function defineReactive(obj, key, val) {
+    Object.defineProperty(obj, key, {
+      enumerable: true, // 属性是否可枚举
+      configurable: true, // 属性是否可被修改或删除
+      get: function reactiveGetter() {
+        return val // 依赖收集
+      },
+      set: function reactiveSetter(newVal) {
+        // 数据更新
+        if (newVal === val) {
+          return
+        }
+        cb(newVal)
+      }
+    })
+  }
+
+  // observer 观察者对象
+  function observer(value) {
+    if (!value || typeof value !== 'object') {
+      return
+    }
+    Object.keys(value).forEach(key => {
+      defineReactive(value, key, value[key])
+    })
+  }
+
+  // 写一个Vue构造函数
+  // class Vue {
+  //   /* Vue构造类 */
+  //   constructor(options) {
+  //     this._data = options.data
+  //     observer(this._data)
+  //   }
+  // }
+  function Vue(options) {
+    this._data = options.data
+    observer(this._data)
+  }
+
+  // 实例化Vue对象
+  let newVue = new Vue({
+    data: {
+      test: 'i am Vue'
+    }
+  })
+  newVue._data.test = 'hi Vue'
+</script>
+</body>
+</html>
