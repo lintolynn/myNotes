@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    // nextTick简易实现
+    let callbacks = []
+    let pending = false
+
+    function nextTick(cb) {
+      callbacks.push(cb)
+      if (!pending) {
+        pending = true
+        setTimeout(flushCallbacks, 0)
+      }
+    }
+
+    function flushCallbacks() {
+      pending = false
+      const copies = callbacks.slice(0)
+      length = copies.length;
+      callbacks.length = 0
+      for (let i = 0; i < length; i++) {
+        copies[i]()
+      }
+    }
+
+    // Watcher实现
+    let uid = 0
+    class Watcher {
+      constructor(props) {
+        this.id = ++uid
+      }
+      update() {
+        console.log('watch' + this.id + ' update');
+        queueWatcher(this)
+      }
+      run () {
+        console.log('watch' + this.id + '视图更新啦～');
+      }
+    }
+
+    let has = {}
+    let queue = []
+    let waiting = false
+
+    function queueWatcher(watcher) {
+      const id = watcher.id
+      // 相同watcher判断id，如果有对应ID证明是同一个watcher不进行后续异步更新操作
+      if (has[id] == null) {
+        has[id] = true
+        queue.push(watcher)
+
+        if (!waiting) {
+          waiting = true
+          nextTick(flushCallbacksTest)
+        }
+
+      }
+    }
+
+    function flushCallbacksTest() {
+      let watcher, id;
+      const total = queue.length
+      for (let index = 0; index < total; index++) {
+        watcher = queue[index]
+        id = watcher.id
+        has[id] = null
+        watcher.run()
+      }
+      waiting = false
+    }
+
+    let watch1 = new Watcher();
+    let watch2 = new Watcher();
+
+    watch1.update();
+    watch1.update();
+    watch2.update();
+</script>
+</body>
+</html>
