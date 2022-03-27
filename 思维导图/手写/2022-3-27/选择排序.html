@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>选择排序</title>
+</head>
+<body>
+<script>
+    const selectSort = (arr) => {
+        const length = arr.length
+        const lineLength = length - 1
+        let minIndex = 0
+        for (let i = 0; i < lineLength; i++) {
+            minIndex = i
+            for (let j = i; j < length; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j
+                }
+            }
+            // 如果 minIndex 对应元素不是目前的头部元素，则交换两者
+            if (minIndex !== i) {
+                // [arr[i] , arr[minIndex]] = [arr[minIndex] , arr[i]]
+                [arr[minIndex] , arr[i]] = [arr[i] , arr[minIndex]]
+            }
+        }
+        return arr
+    }
+
+    // test
+    const testArr = [6, 3, 2, 5, 4, 1]
+    let test = selectSort(testArr)
+    console.log(test)
+</script>
+</body>
+</html>
