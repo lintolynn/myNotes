@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写new关键字</title>
+</head>
+
+<body>
+    <script>
+        function myNew(content, ...args) {
+            // let obj = Object.create(content.prototype)
+            let obj = {}
+            obj.__proto__ = content.prototype
+            let result = content.call(obj, ...args)
+            if (typeof result === 'object') {
+                return result
+            }
+            return obj
+        }
+
+        // test 
+        function Person(name, age) {
+            this.name = name
+            this.age = age
+        }
+        let p1 = myNew(Person, '小明', 18)
+        console.log(p1)
+    </script>
+</body>
+
+</html>

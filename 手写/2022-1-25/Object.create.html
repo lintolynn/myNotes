@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object.create</title>
+</head>
+
+<body>
+    <script>
+        function myObjCreate(obj) {
+            // 声明一个构造函数
+            function Fn() { }
+            // 将对象赋值给构造函数的原型
+            Fn.prototype = obj
+            // 返回这个构造函数
+            return Fn
+        }
+        let test = myObjCreate({ city: '北京', adress: '科技园区' })
+        console.log(test)
+    </script>
+</body>
+
+</html>

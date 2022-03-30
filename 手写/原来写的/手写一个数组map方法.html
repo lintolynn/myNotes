@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>手写一个数组map方法</title>
+</head>
+<body>
+<script>
+
+  // [1, 2, 3].map((item, index) => {
+  //   console.log(item)
+  //   console.log(index)
+  // })
+
+  // Array.prototype.newMap = function (fn) {
+  //   if (this.__proto__ !== Array.prototype) {
+  //     throw `no Array`
+  //     return
+  //   }
+  //   const newArr = [];
+  //   let total = this.length
+  //   for (let i = 0; i < total; i++) {
+  //     newArr.push(fn(this[i], i, this))
+  //   }
+  //   return newArr;
+  // }
+
+  Array.prototype.newMap = function (fn) {
+    let res = []
+    const total = this.length
+    for(let i = 0; i < total; i++) {
+      res.push(fn(this[i], i, this))
+    }
+    return res
+  }
+
+    const arr = [1, 2, 3]
+
+  arr.newMap((currentValue, index, arr) => {
+    console.log("newMap当前元素" + currentValue)
+    console.log("newMap当前索引" + index)
+    console.log("newMap数组对象" + arr)
+  })
+</script>
+</body>
+</html>

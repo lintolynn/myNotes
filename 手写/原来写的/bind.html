@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bind</title>
+</head>
+<body>
+<script>
+  Function.prototype.newBind = function () {
+    let args = [].slice.call(arguments)
+    let first = args.shift()
+    let self = this
+    return function () {
+      return self.call(first, ...args)
+    }
+  }
+
+  function fn1(a, b, c) {
+    console.log('this', this)
+    console.log(a, b, c)
+    return `this is fn1`
+  }
+
+  // test
+  const t1 = fn1.newBind({
+    x: 10
+  }, 20, 30, 40)
+  console.log(t1())
+</script>
+</body>
+</html>

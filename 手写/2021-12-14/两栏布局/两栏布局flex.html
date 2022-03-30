@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两栏布局flex</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .conrain {
+            height: 100px;
+            display: flex;
+        }
+
+        .left,
+        .right {
+            height: 100%;
+        }
+
+        .left {
+            width: 200px;
+            background-color: red;
+        }
+
+        .right {
+            flex: 1;
+            background-color: lightcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="conrain">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+
+</html>

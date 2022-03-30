@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>计算页面标签</title>
+</head>
+<body>
+<div>
+    <div></div>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <ul>
+        <li></li>
+    </ul>
+</div>
+<script>
+
+  // 页面一共有多少个元素
+  let eleAll = document.querySelectorAll('*')
+  let total = [...eleAll].length
+  console.log(total)
+
+  // 页面一共有多少种元素(去重处理)
+  let length = new Set([...eleAll].map(ele => ele.nodeName)).size
+  console.log(length)
+
+  // 统计页面出现次数最多的 3 种 HTML 标签
+  let eleObj = {}
+  Array.from(eleAll).forEach(ele => {
+    eleObj[ele.nodeName] = eleObj[ele.nodeName] ? eleObj[ele.nodeName] += 1 : 1
+  })
+  let newArr = Object.keys(eleObj).map(ele => {
+    return {label: ele, value: eleObj[ele]}
+  }).sort((ele1, ele2) => ele2.value - ele1.value)
+  console.log(newArr)
+</script>
+</body>
+</html>

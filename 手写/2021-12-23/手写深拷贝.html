@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写深拷贝</title>
+</head>
+
+<body>
+    <script>
+        function deepClone(data) {
+            if (!data || typeof data !== 'object') {
+                return data
+            }
+
+            let result = Array.isArray(data) ? [] : {}
+
+            for (let i in data) {
+                const item = data[i]
+                if (data.hasOwnProperty(i)) {
+                    result[i] = deepClone(item)
+                } else {
+                    result[i] = item
+                }
+            }
+            return result
+        }
+
+        let test = {
+            name: '张三',
+            like: {
+                a: 1,
+                b: 2
+            },
+            list: ['apple', 'pear']
+        }
+
+        let copy = deepClone(test)
+        copy.like.a = 3
+        console.log(test)
+        console.log(copy)
+
+    </script>
+</body>
+
+</html>

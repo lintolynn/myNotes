@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>深拷贝</title>
+</head>
+
+<body>
+  <script>
+    function deepClone1(data) {
+      if (data == null || typeof data !== 'object') {
+        return data
+      }
+
+      let result = data.constructor === Array ? [] : {}
+
+      Object.keys(data).forEach(key => {
+        if (data[key] && typeof data[key] === 'object') {
+          result[key] = deepClone1(data[key])
+        } else {
+          result[key] = data[key]
+        }
+      })
+
+      return result
+    }
+
+    function deepClone2(obj) {
+      if (typeof obj !== 'object' || obj == null) {
+        return obj
+      }
+
+      let result = ''
+      if (obj instanceof Array) {
+        result = []
+      } else {
+        result = {}
+      }
+
+      for (let i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          result[i] = deepClone2(obj[i])
+        }
+      }
+
+      return result
+    }
+
+    // test1
+    let obj1 = {
+      a: {
+        a1: '北京'
+      },
+      b: {
+        b1: '上海'
+      }
+    }
+
+    let obj2 = deepClone2(obj1)
+    obj1.a = {
+      a1: '广州'
+    }
+    console.log('obj1', obj1)
+    console.log('obj2', obj2)
+
+    // 浏览器垃圾回收
+    // 1. 引用计数
+    // 2. 标记清除
+    // 新生代老生代 新生代 内存容量小 From到To过程，回收未存活的对象。将存活的对象复制到To中，等待下次回收
+    // 老生代：1.晋升，新生代经过多次回收，还存活的对象，就放入老生代内存中
+    // 2.标记清除，给所有对象打上标记，从根节点进行遍历，如果是程序运行的对象或者正在使用的对象，取消标记，回收被标记的对象
+    // 3.整理内存碎片：将对象移入到内存的另一端
+
+
+    // 强缓存 设置Expirces 过期日期 设置Cache-Control max-age过期时间戳
+    // 协商缓存 需要向服务器询问是否已经过期
+    // Last-Modified Etag
+  </script>
+</body>
+
+</html>

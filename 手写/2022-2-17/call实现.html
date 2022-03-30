@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myCall = function (content) {
+            // 判断this是否为函数
+            if (typeof this !== 'function') {
+                return TypeError('not a function')
+            }
+            // 获取传入参数和返回结果
+            let args = [...arguments].slice(1),
+                result = null;
+            // 判断content是否有传入，没有默认是window，或者形参默认让content = window
+            content = content || window
+            // 函数执行设置为对象的方法
+            content.fn = this
+            // 执行函数并赋值给返回结果
+            result = content.fn(...args)
+            // 删除属性
+            delete content.fn
+            // 返回结果
+            return result
+        }
+
+        // test
+        // function add(a, b) {
+        //     return a + b
+        // }
+        // function sub(a, b) {
+        //     return a - b
+        // }
+        // let test = add.myCall(sub, 1, 2)
+        // console.log(test)
+        var name = '全局名'
+        function getName() {
+            console.log(this.name)
+        }
+        const obj = {
+            name: '晓红'
+        }
+        getName() // 全局名
+        let test = getName.myCall(obj, '小米') // 晓红
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多行文本溢出</title>
+    <style>
+        .ellipsis3 {
+            width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /* white-space: nowrap; */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+
+        p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /* white-space: nowrap; */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ellipsis3">水电费第三方到付似懂非懂水电费递四方速递发送到</div>
+</body>
+
+</html>

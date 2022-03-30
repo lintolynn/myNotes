@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写apply</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myApply = function (content = window) {
+            if (typeof this !== 'function') {
+                return new TypeError('not a function')
+            }
+            // var content = content || window
+            content.fn = this
+            let result = ''
+            // 需要判断是否存储第二个参数 arguments第一项是传入的对象，而不是参数
+            // 如果存在，就将第二个参数展开
+            const parmas = arguments[1]
+            if (parmas) {
+                result = content.fn(...parmas)
+            } else {
+                result = content.fn()
+            }
+            delete content.fn
+            return result
+        }
+
+        Function.prototype.MYAPPLY = function (content = window) {
+            if (typeof this !== 'function') {
+                return new TypeError('not a function')
+            }
+            content.fn = this
+            const params = arguments[1]
+            let result = ''
+            if (params) {
+                result = content.fn(...params)
+            } else {
+                result = content.fn()
+            }
+            delete content.fn
+            return result
+        }
+
+        // test 
+        let obj = {
+            name: '张三'
+        }
+        function fn2(age, sex) {
+            console.log(age)
+            console.log(sex)
+            console.log(this)
+        }
+        fn2.myApply(obj, [18, '小哥哥']) // 18 '小哥哥' obj{name: '张三'}
+        fn2.MYAPPLY(obj, [18, '小哥哥']) // 18 '小哥哥' obj{name: '张三'}
+    </script>
+</body>
+
+</html>

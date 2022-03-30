@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写instanceof</title>
+</head>
+
+<body>
+    <script>
+        // function myIns(left, right) {
+        //     while (left) {
+        //         if (left.__proto__ === right.prototype) {
+        //             return true
+        //         }
+        //         left = left.__proto__
+        //     }
+        //     return false
+        // }
+
+        function myIns(left, right) {
+            let proto = Object.getPrototypeOf(left)
+            let rightPro = right.prototype
+            while (true) {
+                if (!proto) return false
+                if (proto === rightPro) return true
+                proto = left.getPrototypeOf(proto)
+            }
+        }
+
+        console.log(myIns([], Array))
+        console.log(myIns(() => { }, Function))
+        console.log(myIns(1, Number))
+    </script>
+</body>
+
+</html>

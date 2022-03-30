@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组合寄生继承</title>
+</head>
+
+<body>
+    <!-- <script>
+        /*
+            为了解决构造函数被执行两次的问题, 
+            我们将指向父类实例改为指向父类原型, 
+            减去一次构造函数的执行
+        */
+        function Parent(name) {
+            this.name = [name]
+        }
+        Parent.prototype.getName = function () {
+            return this.name
+        }
+        function Child() {
+            // 构造函数继承
+            Parent.call(this, '张三')
+        }
+        // Child.prototype = new Parent() 这是寄生继承 
+        // Child.prototype = Parent.prototype //将`指向父类实例`改为`指向父类原型`
+        /*
+            但 Child.prototype = Parent.prototype 
+            这种方式存在一个问题，由于子类原型和父类原型指向同一个对象，
+            我们对子类原型的操作会影响到父类原型，例如给Child.prototype增加一个getName()方法，
+            那么会导致Parent.prototype也增加或被覆盖一个getName()方法，为了解决这个问题，
+            我们给Parent.prototype做一个浅拷贝
+        */
+        Child.prototype = Object.create(Parent.prototype)
+        Child.prototype.constructor = Child
+        Child.prototype.getName = function () {
+            console.log('我是子类的getName方法')
+        }
+
+        // 测试
+        const child = new Child()
+        console.log(child)
+        const parent = new Parent()
+        console.log(child.getName()) // ['张三']
+        // console.log(parent.getName()) //
+
+    </script> -->
+
+    <script>
+        function Person(name) {
+            this.name = name
+        }
+        Person.prototype.getName = function (name) {
+            return this.name
+        }
+        function Child() {
+            Person.call(this, '张三')
+        }
+        Child.prototype = new Person
+        Child.prototype.constructor = Child
+
+        // test 
+        let c1 = new Child()
+        console.log(c1)
+    </script>
+</body>
+
+</html>

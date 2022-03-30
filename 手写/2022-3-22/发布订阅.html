@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class EventEmitter {
+            constructor() {
+                this.eventCenter = {}
+            }
+            // 发布
+            on(eventName, cb) {
+                if (!this.eventCenter[eventName]) {
+                    this.eventCenter[eventName] = []
+                }
+                this.eventCenter[eventName].push(cb)
+            }
+            // 订阅
+            emit(eventName, ...args) {
+                if (this.eventCenter[eventName]) {
+                    const copyEventCenter = this.eventCenter[eventName].slice()
+                    copyEventCenter.forEach(callback => {
+                        callback(...args)
+                    });
+                }
+            }
+            // 取消订阅
+            off(eventName, cb) {
+                const index = this.eventCenter[eventName].indexOf(cb)
+                if (index > -1) {
+                    console.log('取消了订阅')
+                    this.eventCenter[eventName].splice(index, 1)
+                }
+            }
+            // 只执行一次
+            once(eventName, cb) {
+                const wrapper = (...args) => {
+                    cb(...args)
+                    this.off(eventName, wrapper)
+                }
+                this.on(eventName, wrapper)
+            }
+        }
+
+
+        const eventEmitter = new EventEmitter
+        const handle2 = (...args) => {
+            console.log('参数是', ...args)
+        }
+        eventEmitter.once('test1', handle2)
+        eventEmitter.emit('test1', '小明')
+    </script>
+</body>
+
+</html>

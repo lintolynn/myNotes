@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function mySetTimeout(fn, t) {
+            let timer = setInterval(() => {
+                clearInterval(timer)
+                fn()
+            }, t)
+        }
+        // 思考：为什么要用 settimeout 模拟实现 setinterval？setinterval 的缺陷是什么？
+        mySetTimeout(() => {
+            console.log('1')
+        }, 300)
+    </script>
+</body>
+
+</html>

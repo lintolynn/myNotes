@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 深拷贝（考虑到复制 Symbol 类型）
+        function isObject(val) {
+            return val && typeof val === 'object'
+        }
+        function deepClone(obj, hash = new WeakMap()) {
+            if (!isObject(obj)) {
+                return obj
+            }
+            if (hash.has(obj)) {
+                return hash.get(obj)
+            }
+            let target = obj instanceof Array ? [] : {}
+            hash.set(obj, target)
+            Reflect.ownKeys(obj).forEach(list => {
+                const item = obj[list]
+                if (isObject(item)) {
+                    target[list] = deepClone(item, hash)
+                } else {
+                    target[list] = item
+                }
+            })
+            return target
+        }
+
+        // test
+        const myTest = {
+            city: '北京',
+            Symbol: {
+                a: 2
+            },
+            // arr: [1, 2, 3],
+            like: {
+                one: '爱吃',
+                two: { sex: '女' }
+            },
+        }
+        let copy = deepClone(myTest)
+        myTest.Symbol.a = 333
+        console.log({ ...myTest })
+        console.log({ ...copy })
+    </script>
+</body>
+
+</html>

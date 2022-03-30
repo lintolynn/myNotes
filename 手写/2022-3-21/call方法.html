@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.mycall = function (context, ...args) {
+            if (!context || context == null) {
+                context = window
+            }
+            // 创造唯一key值，作为我们构造context内部方法名
+            let fn = Symbol()
+            // this指向调用call的函数
+            context[fn] = this
+            // 执行函数并返回结果 相当于把自身作为传入的context的方法进行调用了
+            return context[fn](...args)
+        }
+
+        // test
+        let person = {
+            fullName: function (val = '') {
+                console.log(this.firstName)
+                console.log(val)
+            }
+        }
+        let person1 = {
+            firstName: "Bill",
+            lastName: "Gates",
+        }
+        person.fullName.mycall(person1, 123)
+    </script>
+</body>
+
+</html>

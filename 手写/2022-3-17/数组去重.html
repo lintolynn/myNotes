@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+        let arr = [2, 3, 1, 6, 3, 2, 1, 4, 2, 4, 5, 3]
+
+        // 方法一 set
+        const t1 = [...new Set(arr)]
+        console.log(t1)
+
+        // 方法二 filter
+        const t2 = arr.filter((item, index) => arr.indexOf(item) === index)
+        console.log(t2)
+    </script>
+</body>
+
+</html>

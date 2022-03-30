@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var worker = new Worker("./webworker.js")
+        console.log(worker)
+        // 此处仍是file协议是不允许的,需要安排到server下，通过相对路径去取
+        // 此处静态访问脚本文件是不被允许的
+        // worker.onmessage = funciton(e) {
+            // console.log("worker通知的message", e)
+            // worker.postMessage("message收到了")
+        // }
+    </script>
+</body>
+
+</html>

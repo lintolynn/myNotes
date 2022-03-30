@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bing</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myApply = function (context, ...args) {
+            if (!context || context == null) {
+                context = window
+            }
+            // 创造一个唯一的key值，作为构造函数context内部方法名
+            let fn = Symbol()
+            // this指向调用apply的函数
+            context[fn] = this
+            // 执行函数并返回结果(相当于把自身作为传入的context方法调用了)
+            // return context[fn](...args)
+
+            // 或者新申明返回结果，执行函数，并赋值给返回结果，
+            let result = context[fn](...args)
+            // 删除内部方法名
+            delete context[fn]
+            // 返回结果
+            return result
+        }
+        // test 
+        const name = '小王', age = 17;
+        const obj = {
+            name: '小张',
+            objAge: this.age,
+            myFun(val) {
+                console.log(this.name + '年龄' + this.age + val)
+            }
+        }
+        const db = {
+            name: '小红',
+            age: 22
+        }
+        // obj.myFun.call(db, '爱吃') // 小红年龄22爱吃
+        obj.myFun.myApply(db, ['爱玩', '爱吃', '爱撸猫']) // 小红年龄22爱玩
+
+    </script>
+</body>
+
+</html>

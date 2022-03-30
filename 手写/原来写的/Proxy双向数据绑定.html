@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proxy双向数据绑定</title>
+</head>
+<body>
+<input type="text" id="input1">
+<p id="p1"></p>
+<script>
+  const inp = document.getElementById('input1')
+  const p = document.getElementById('p1')
+  const obj = {}
+
+  const newObj = new Proxy(obj, {
+    get(target, key, receiver) {
+      console.log(`getting ${key}`)
+      return Reflect.get(target, key, receiver)
+    },
+    set(target, key, value, receiver) {
+      console.log(target, key, value, receiver)
+      if (key === 'text') {
+        inp.value = value
+        p.innerHTML = value
+      }
+      return Reflect.set(target, key, value, receiver)
+    }
+  })
+  inp.addEventListener('keyup', function (e) {
+    newObj.text = e.target.value
+  })
+
+</script>
+</body>
+</html>

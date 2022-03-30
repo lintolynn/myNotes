@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 冒泡排序
+        function bubbleSort(arr) {
+            const outherLength = arr.length
+            const liningLength = outherLength - 1
+            for (let i = 0; i < outherLength; i++) {
+                for (let j = 0; j < liningLength; j++) {
+                    // 正序：若相邻元素前面的数比后面的大，则两者互换位置 
+                    if (arr[j] > arr[j + 1]) {
+                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+                    }
+                }
+            }
+            return arr
+        }
+
+        function bubbleSort2(arr) {
+            const total = arr.length,
+                oderTotal = total - 1;
+            for (let i = 0; i < total; i++) {
+                for (let j = 0; j < oderTotal; j++) {
+                    let temp = ''
+                    if (arr[j] > arr[j + 1]) {
+                        temp = arr[j]
+                        arr[j] = arr[j + 1]
+                        arr[j + 1] = temp
+                        // [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
+                    }
+                }
+            }
+            return arr
+        }
+
+        // test
+        const arr1 = [3, 5, 4, 6, 2, 1, 7]
+        const arr2 = [3, 5, 4, 6, 2, 1, 7]
+        const t1 = bubbleSort(arr1)
+        const t2 = bubbleSort2(arr2)
+        console.log(t1)
+        console.log(t2)
+    </script>
+</body>
+
+</html>

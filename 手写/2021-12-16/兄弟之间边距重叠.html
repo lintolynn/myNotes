@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兄弟之间边距重叠</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .item {
+            width: 100px;
+            height: 100px;
+            margin: 10px 0;
+        }
+
+        .item:nth-child(1) {
+            background-color: lightcoral;
+        }
+
+        .item:nth-child(2) {
+            background-color: lightcyan;
+            /* 解决边距底座添加 */
+            /* display: inline-block;
+            float: left;
+            position: absolute; */
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="contain">
+        <li class="item"></li>
+        <li class="item"></li>
+    </ul>
+</body>
+
+</html>

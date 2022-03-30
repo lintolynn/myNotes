@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <ul @click="handleSave">
+        <li v-for="(item, index) of list" :key=index :data-index="index">{{ item.name }}</li>
+    </ul>
+</div>
+
+<script>
+  let app = new Vue({
+    el: '#app',
+    data: {
+      list: [
+        {name: '晓红'},
+        {name: '复古红'},
+        {name: '光电红'},
+        {name: '固化剂'},
+        {name: '破非'},
+        {name: '十多个'}
+      ]
+    },
+    methods: {
+      handleSave(event) {
+        const target = event.target
+        if (!event || target.nodeName.toLowerCase() !== 'li') return
+        let index = target.dataset.index
+        this.list.splice(index * 1 + 1, 0, {
+          name: '新来的'
+        })
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function deepClone(data) {
+      if (data == null || typeof data !== 'object') {
+        return data
+      }
+
+      let result = null
+      if (data.constructor === Array) {
+        result = []
+      } else {
+        result = {}
+      }
+
+      // for (let [key, value] of data.entries()) {
+      for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+          result[key] = deepClone(data[key])
+        }
+      }
+      return result
+
+    }
+
+    function deepClone2(data) {
+      if (data == null || typeof data !== 'object') {
+        return data
+      }
+
+      let result = null
+      if (data.__proto__ === Array.prototype) {
+        result = []
+      } else {
+        result = {}
+      }
+
+      Object.getOwnPropertyNames(data).forEach(key => {
+        // Object.keys(data).forEach(key => {
+        if (data[key] && typeof data[key] === 'object') {
+          result[key] = deepClone2(data[key])
+        } else {
+          result[key] = data[key]
+        }
+      })
+
+      return result
+
+    }
+
+    let obj = {
+      msg: {
+        age: 18
+      },
+      id: 1,
+      name: 'Tom',
+    }
+
+    // test
+    let t1 = deepClone2(obj)
+    t1.msg.age = 20
+    console.log({ ...obj })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>手写call</title>
+</head>
+<body>
+<script>
+    Function.prototype.newCall = function (content) {
+      if (typeof this !== 'function') return
+      content = content || window
+      content.fn = this
+      let params = [...arguments].slice(1)
+      let result = content.fn(...params)
+      delete content.fn
+      return result
+    }
+
+    // test
+
+    function Person(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    function Child(name, age) {
+      Person.newCall(this, name, age)
+    }
+
+    let c1 = new Child('张三', 18)
+    console.log(c1)
+
+
+    /*
+    * 1.首先context为可选参数，如果不传的话默认上下文是window
+    * 2.接下来给content创建一个fn属性，并将值设置为需要调用的函数
+    * 3.因为call可以传入多个参数作为调用函数的参数，所有需要将参数剥离出来
+    * 4.然后调用函数并将对象上的函数删除
+    * */
+    Function.prototype.newCall2 = function (content = window) {
+      if (typeof this !== 'function') return
+      content.fn = this
+      let params = Array.prototype.slice.call(arguments).slice(1)
+      let result = content.fn(...params)
+      delete content.fn
+      return result
+    }
+
+    function Person2(name, age = '') {
+      this.name = name
+      this.age = age
+    }
+
+    function child2(...params) {
+      Person2.newCall2(this, ...params)
+    }
+
+    let c2 = new child2('李四')
+    console.log(c2)
+
+
+    let newCopy = function (constructor, ...params) {
+      let obj = {}
+      obj.__proto__ = constructor.prototype
+      let result = constructor.call(obj, ...params)
+      if (typeof result === 'object') {
+        return result
+      } else {
+        return obj
+      }
+    }
+
+    let c3 = newCopy(Person2, '李四', 29)
+    console.log(c3)
+
+</script>
+</body>
+</html>

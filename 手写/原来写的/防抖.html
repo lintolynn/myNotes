@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>防抖</title>
+</head>
+<body>
+<input type="text" id="inp">
+<script>
+  const inpDom = document.getElementById('inp')
+
+  function antiShake(fn, layTime = 500) {
+     let timer = null
+     return function () {
+       if (timer) {
+         clearInterval(timer)
+       }
+       timer = setTimeout(() => {
+         // fn.call(this, ...arguments)
+         fn.apply(this, arguments)
+         timer = null
+       }, layTime)
+     }
+  }
+
+  inpDom.addEventListener('keyup', antiShake(function () {
+    console.log(this.value)
+  }, 300))
+</script>
+</body>
+</html>

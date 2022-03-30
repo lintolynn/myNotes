@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    Array.prototype.myMap = function (fn, thisValue = []) {
+      let res = []
+      this.reduce((pre, cur, index, arr) => {
+        return res.push(fn.call(thisValue, cur, index, arr))
+      }, [])
+      return res
+    }
+    let arr = [2, 3, 1, 5]
+    arr.myMap((item, index, arr) => {
+      console.log(item, index, arr)
+    }, 1)
+</script>
+</body>
+</html>

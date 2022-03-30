@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>手写apply</title>
+</head>
+<body>
+<script>
+    Function.prototype.newApply = function (content = window) {
+      if(typeof this !== 'function') {
+        return
+      }
+      content.fn = this
+      let result = ''
+      if (arguments[1]) {
+        result = content.fn(...arguments[1])
+      } else {
+        result = content.fn()
+      }
+      delete content.fn
+      return result
+    }
+
+    // test
+    function Person(name, age) {
+      this.name = name
+      this.age = age
+    }
+
+    function Son(name, age) {
+      Person.newApply(this, [name, age])
+    }
+
+    let t1 = new Son('小米', 19)
+    console.log(t1)
+
+</script>
+</body>
+</html>
