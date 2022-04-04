@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写类型判断函数</title>
+</head>
+
+<body>
+    <script>
+        function getType(value) {
+            // 判断是否为null
+            if (value == null) {
+                return value + ''
+            }
+            // 判断引用类型
+            if (typeof value === 'object') {
+                // return Object.prototype.toString.call(value).slice(8, -1)
+                let com = Object.prototype.toString.call(value),
+                    type = com.split(' ')[1].split('');
+                type.pop();
+                return type.join("").toLowerCase();
+            }
+            // 其余为基本类型
+            return typeof value
+        }
+
+        // 测试
+        const test = [null, Function, 1, undefined, [], {}]
+        test.forEach(item => {
+            console.log(getType(item))
+        })
+    </script>
+</body>
+
+</html>

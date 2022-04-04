@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>dom节点翻转</title>
+</head>
+<body>
+<ul id="box">
+    <li>小A</li>
+    <li>小B</li>
+    <li>小C</li>
+    <li>小D</li>
+</ul>
+<script>
+  const box = document.getElementById('box')
+  const tagLi = document.getElementsByTagName('li')
+  let fragment = document.createDocumentFragment()
+  const total = tagLi.length - 1
+  // 方法一创建fragment对象
+  // for(let i = total; i >= 0; i--) {
+  //   fragment.append(tagLi[i]);
+  // }
+  // box.appendChild(fragment)
+
+
+  // 方法二使用拼接的方法
+  let str = "";
+  for (let i = total; i >= 0; i--) {
+    str += "<li>" + tagLi[i].innerHTML + "</li>"
+  }
+  box.innerHTML = str
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+        const arr = [1, 1, 1, 2, 2, 2]
+
+        // 方案一
+        function unArr(arr) {
+            let newArr = []
+            arr.forEach(item => {
+                if (newArr.indexOf(item) === -1) {
+                    newArr.push(item)
+                }
+            })
+            return newArr
+        }
+
+        let test1 = unArr(arr)
+        console.log(test1)
+
+        // 方案二
+        let test2 = Array.from(new Set(arr))
+        console.log(test2)
+
+        // 方案三
+        function unique3(arr) {
+            const newArr = []
+            let obj = {}
+            arr.forEach(item => {
+                if (!obj[item]) {
+                    newArr.push(item)
+                    obj[item] = 1
+                } else {
+                    obj[item]++
+                }
+            })
+            return newArr
+        }
+        let test3 = unique3(arr)
+        console.log(test3)
+    </script>
+</body>
+
+</html>

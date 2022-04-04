@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写instanceof方法</title>
+</head>
+
+<body>
+    <script>
+        function myInstanceof(left, right) {
+            // 获取类型的原型
+            let proto = Object.getPrototypeOf(left)
+            // 获取对象的原型
+            let prototype = right.prototype
+            // 循环判断对象的原型是否等于类型的原型，直到对象原型为null
+            while (true) {
+                if (!proto) return false
+                if (proto === prototype) return true
+                proto = Object.getPrototypeOf(proto)
+            }
+        }
+
+        // 测试
+        let test = myInstanceof({}, Object)
+        console.log(test)
+    </script>
+</body>
+
+</html>

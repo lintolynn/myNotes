@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>s手写节流</title>
+</head>
+
+<body>
+    <div id=div1 draggable="true">可拖拽</div>
+
+    <script>
+        function throttle(func, wait = 300) {
+            let timer = null
+            return function () {
+                if (timer) {
+                    return
+                }
+                tiemr = setTimeout(() => {
+                    func.apply(this, arguments)
+                    tiemr = null
+                }, wait)
+            }
+        }
+
+        // test 
+        const div1 = document.getElementById('div1')
+        div1.addEventListener('drag', throttle(function (e) {
+            console.log(e.offsetX, e.offsetY)
+        }, 200))
+    </script>
+</body>
+
+</html>

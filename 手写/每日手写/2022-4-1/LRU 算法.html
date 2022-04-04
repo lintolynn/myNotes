@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LRU 算法</title>
+</head>
+
+<body>
+    <script>
+        //  一个Map对象在迭代时会根据对象中元素的插入顺序来进行
+        // 新添加的元素会被插入到map的末尾，整个栈倒序查看
+        class LRUCache {
+            constructor(max) {
+                this.cacheList = new Map()
+                this.maxCache = max
+            }
+            get(key) {
+                if (this.cacheList.has(key)) {
+                    let tempVal = this.cacheList.get(key)
+                    this.cacheList.delete(key)
+                    this.cacheList.set(key, tempVal)
+                    return tempVal
+                }
+                return -1
+
+            }
+            put(key, value) {
+                // 已存在
+                if (this.cacheList.has(key)) {
+                    this.cacheList.delete(key)
+                    this.cacheList.set(key, value)
+                }
+                // key不存在，cache未满
+                else if (this.cacheList.size < this.maxCache) {
+                    this.cacheList.set(key, value)
+                }
+                // 添加新key，删除旧key
+                else {
+                    this.cacheList.set(key, value);
+                    // 删除map的第一个元素，即为最长未使用的
+                    this.cacheList.delete(this.cacheList.keys().next().value);
+                }
+            }
+        }
+
+        let cache = new LRUCache(2);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        console.log("cache.get(1)", cache.get(1))// 返回  1
+        cache.put(3, 3);// 该操作会使得密钥 2 作废
+        console.log("cache.get(2)", cache.get(2))// 返回 -1 (未找到)
+        // cache.put(4, 4);// 该操作会使得密钥 1 作废
+        // console.log("cache.get(1)", cache.get(1))// 返回 -1 (未找到)
+        // console.log("cache.get(3)", cache.get(3))// 返回  3
+        // console.log("cache.get(4)", cache.get(4))// 返回  4
+
+    </script>
+</body>
+
+</html>

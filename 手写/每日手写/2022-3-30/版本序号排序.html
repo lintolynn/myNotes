@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+        目描述:有一组版本号如下
+        ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']。
+        在需要对其进行排序，
+        序的结果为 ['4.3.5','4.3.4.5','2.3.3','0.302.1','0.1.1']
+        */
+        function versionSort(arr) {
+            return arr.sort((a, b) => {
+                let i = 0
+                const arr1 = a.split('.')
+                const arr2 = b.split('.')
+
+                while (true) {
+                    const s1 = arr1[i]
+                    const s2 = arr2[i]
+                    i++
+                    if (s1 === undefined || s2 === undefined) {
+                        return arr2.length - arr1.length
+                    }
+
+                    if (s1 === s2) continue
+
+                    return s2 - s1
+                }
+            })
+        }
+
+        // test
+        const arr = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
+        const t1 = versionSort(arr)
+        console.log(t1)
+    </script>
+
+</body>
+
+</html>

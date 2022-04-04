@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写题1compose函数</title>
+</head>
+
+<body>
+    <script>
+        function fn1(x) {
+            return x + 1
+        }
+        function fn2(x) {
+            return x + 2
+        }
+        function fn3(x) {
+            return x + 3;
+        }
+        function fn4(x) {
+            return x + 4;
+        }
+        const a = compose(fn1, fn2, fn3, fn4);
+        console.log(a(1)); // 1+4+3+2+1=11
+
+        // function compose(...fn) {
+        //     if (!fn.length) return (v) => v;
+        //     if (fn.length === 1) return fn[0];
+        //     return fn.reduce(
+        //         (pre, cur) =>
+        //             (...args) =>
+        //                 pre(cur(...args))
+        //     );
+        // }
+
+        /*
+            reduce 为数组中的每一个元素依次执行回调函数，
+            不包括数组中被删除或从未被赋值的元素，
+            接受四个参数：初始值（或者上一次回调函数的返回值），
+            当前元素值，当前索引，调用 reduce 的数组
+            callback （执行数组中每个值的函数，包含四个参数）
+            1、previousValue （上一次调用回调返回的值，或者是提供的初始值（initialValue））
+            2、currentValue （数组中当前被处理的元素）
+            3、index （当前元素在数组中的索引）
+            4、array （调用 reduce 的数组）
+            initialValue （作为第一次调用 callback 的第一个参数。）
+        */
+
+
+        // function compose(...fn) {
+        //     // 如果执行函数数组没有值，则直接执行函数并返回
+        //     if (!fn.length) return (v) => v;
+        //     // 如果只传入了一个执行函数，则返回函数第一项
+        //     if (fn.length === 1) return fn[0];
+        //     // 返回，遍历fn数组，依次将函数执行
+        //     return fn.reduce((pre, cur) => {
+        //         return (...args) => {
+        //             return pre(cur(...args))
+        //         }
+        //     })
+        // }
+
+
+        /*
+            compose内的函数执行顺序为从右向左，
+            即最右边的函数（最后一个参数）最先执行，
+            执行完的结果作为参数传递给前一个函数（包裹它的函数），
+            一直到整个函数执行完毕，return一个函数，
+            所以compose内部实现的原理类似多米诺骨牌，层层递进的。
+        */
+
+        function compose() {
+            let fns = [].slice.call(arguments)
+            const total = fns.length
+            if (!total) return (v) => v;
+            if (total === 1) return fns[0];
+            return function (initialArg) {
+                let res = initialArg
+                for (let i = total - 1; i >= 0; i--) {
+                    res = fns[i](res)
+                }
+                return res
+            }
+        }
+
+        /*
+            pipe函数与compose函数十分相近，
+            也是一个函数执行完毕后将结果作为参数传递给另一个函数，
+            但它们的区别仅在于pipe函数的接收的函数参数，
+            是从左向右执行的，即第一个参数（函数）执行完毕，
+            将结果吐出来作为参数传递给第二个函数，也就是pipe的第二个参数，
+            直到pipe所有参数作为函数都执行完毕，return出一个函数，才算执行完成。
+        */
+
+        function pipe() {
+            let fns = Array.prototype.slice.call(arguments)
+            const total = fns.length
+            if (!total) return (v) => v;
+            if (total === 1) return fns[0];
+            return function (initVal) {
+                let res = initVal
+                for (let i = 0; i < total; i++) {
+                    res = fns[i](res)
+                }
+                return res
+            }
+        }
+        // test 
+        let testP = pipe(fn1)
+        console.log(testP(1))
+
+    </script>
+</body>
+
+</html>

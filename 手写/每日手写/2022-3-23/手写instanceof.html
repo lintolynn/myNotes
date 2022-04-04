@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function myInstanceof(left, right) {
+            const leftType = Object.prototype.toString.call(left).slice(8, -1)
+            if (!['Object', 'Array', 'Function'].includes(leftType)) {
+                return false
+            }
+
+            while (true) {
+                if (left == null) {
+                    return false
+                }
+                if (left.__proto__ === right.prototype) {
+                    return true
+                }
+                left = left.__proto__
+            }
+        }
+        // test
+        let t1 = myInstanceof([], Array)
+        let t2 = myInstanceof('1', String)
+        console.log(t1)
+        console.log(t2)
+    </script>
+</body>
+
+</html>

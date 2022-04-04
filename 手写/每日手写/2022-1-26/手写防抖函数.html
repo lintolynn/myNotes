@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+</head>
+
+<body>
+    <input type="text" id="input">
+    <script>
+        function debounce(fn, delay = 500) {
+            // 默认时间为null
+            let timer = null
+
+            return function () {
+                let that = this,
+                    args = arguments
+
+                // 如果此时存在定时器的话，则清空的定时器重新记时
+                if (timer) {
+                    clearTimeout(timer)
+                    timer = null
+                }
+
+                // 使用事件间隔指定事件后执行
+                timer = setTimeout(() => {
+                    fn.apply(that, args)
+                }, delay)
+            }
+        }
+
+        const inp = document.getElementById('input')
+
+        // inp.addEventListener('click', function () {
+        //     console.log(this.value)
+        // })
+
+        inp.addEventListener('keyup', debounce(function () {
+            console.log(this.value)
+        }, 500))
+
+    </script>
+</body>
+
+</html>

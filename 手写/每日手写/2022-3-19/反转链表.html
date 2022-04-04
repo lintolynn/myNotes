@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反转链表</title>
+</head>
+
+<body>
+    <script>
+        // 反转链表
+
+        /*
+            方法一
+            时间复杂度：O(n)O(n)，其中 nn 是链表的长度。需要遍历链表一次。
+            空间复杂度：O(1)O(1)。
+        */
+        // 1 2 3 4 => 4 3 2 1 
+        function reverseList1(head) {
+            let pre = null
+            let cur = head
+            while (cur) {
+                let next = cur.next
+                cur.next = pre
+                pre = cur
+                cur = next
+            }
+            return pre
+        }
+
+        /*
+            方法二
+            时间复杂度：O(n)O(n)，其中 nn 是链表的长度。需要对链表的每个节点进行反转操作。
+            空间复杂度：O(n)O(n)，其中 nn 是链表的长度。空间复杂度主要取决于递归调用的栈空间，最多为 nn 层。
+        */
+        var reverseList2 = function (head) {
+            if (head == null || head.next == null) {
+                return head;
+            }
+            const newHead = reverseList(head.next);
+            head.next.next = head;
+            head.next = null;
+            return newHead;
+        };
+
+        // test
+        const t1 = reverseList1([1, 2, 3, 4, 5])
+        console.log(t1)
+    </script>
+</body>
+
+</html>

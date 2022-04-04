@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写new操作符</title>
+</head>
+
+<body>
+    <script>
+        function objectFactory() {
+            let result = null
+            let constructor = Array.prototype.shift.call(arguments)
+            if (typeof this !== 'function') {
+                return TypeError('not a function')
+            }
+            let obj = Object.create(constructor.prototype)
+            result = constructor.call(obj, ...arguments)
+            if (typeof result !== 'function' || typeof result !== 'object') {
+                return obj
+            }
+            return result
+        }
+    </script>
+</body>
+
+</html>

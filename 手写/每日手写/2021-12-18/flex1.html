@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .contain {
+            margin-bottom: 20px;
+        }
+
+        .content {
+            display: flex;
+        }
+
+        .demo1 .item {
+            flex-basis: 0;
+        }
+
+        .demo2 .item {
+            /*默认值：0；*/
+            flex-grow: 1;
+            /*默认值：1；*/
+            flex-shrink: 1;
+            flex-basis: 0%;
+        }
+
+        .demo3 .item {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: auto;
+        }
+
+        .demo4 .item {
+            flex: 1 1 0%;
+        }
+
+        .demo5 .item {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0%;
+        }
+
+        .order1 {
+            width: 100px;
+            background-color: blue;
+        }
+
+        .order2 {
+            background-color: red;
+        }
+
+        .order3 {
+            background-color: chartreuse;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- 
+            flex: 1的组成：
+
+            flex-grow（放大比例，默认为0）
+
+
+            flex-shrink（缩小比例，默认为1）
+
+
+            flex-basic（flex 元素的内容盒（content-box）的尺寸，默认auto）的缩写；
+
+
+            flex的第三项指的是flex-basis这个属性，这个属性的“0”和“auto”在大多数情况下都会有所不同：
+
+            数值被解释为特定宽度,因此0将与指定“width：0”相同；
+
+            0%就相当于容器内所有项目原本的width不起作用,然后平分宽度；
+
+            auto就相当于容器内所有项目原本的width起作用，伸缩空间减去这些width，剩余空间再平分。所以有的情况下auto和0%是相同的
+
+            总结：flex-basis为0%，覆盖width，实际占用0， flex-basis为auto，width权限更高，占用width的值 
+    -->
+
+    <div class="contain demo1">
+        <h1>flex-basic设置0,相当于设置了指定width：0;即使设置了width也将失效</h1>
+        <ul class="content">
+            <li class="item order1">1</li>
+            <li class="item order2">2</li>
+            <li class="item order3">3</li>
+        </ul>
+    </div>
+
+    <div class="contain demo2">
+        <h1>flex-basic设置0%，相当于容器内所有项目原本的width不起作用,然后平分宽度</h1>
+        <ul class="content">
+            <li class="item order1">1</li>
+            <li class="item order2">2</li>
+            <li class="item order3">3</li>
+        </ul>
+    </div>
+
+    <div class="contain demo3">
+        <h1>flex-basic设置auto，相当于容器内所有项目原本的width起作用，伸缩空间减去这些width，剩余空间再平分。所以有的情况下auto和0%是相同的</h1>
+        <ul class="content">
+            <li class="item order1">1</li>
+            <li class="item order2">2</li>
+            <li class="item order3">3</li>
+        </ul>
+    </div>
+
+    <div class="contain demo4">
+        <h1>flex:1;等价于flex: 1 1 0%;</h1>
+        <ul class="content">
+            <li class="item order1">1</li>
+            <li class="item order2">2</li>
+            <li class="item order3">3</li>
+        </ul>
+    </div>
+
+    <div class="contain demo5">
+        <h1>
+            flex:1;也同样等价于
+            flex-grow: 1;
+            flex-shrink : 1;
+            flex-basis: 0%;
+        </h1>
+        <ul class="content">
+            <li class="item order1">1</li>
+            <li class="item order2">2</li>
+            <li class="item order3">3</li>
+        </ul>
+    </div>
+</body>
+
+</html>

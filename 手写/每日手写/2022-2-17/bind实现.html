@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myBind = function (content) {
+            // 判断调用对象是否是函数
+            if (typeof this !== 'function') {
+                throw TypeError('not a function')
+            }
+            // 定义参数保留this
+            const args = [...arguments].slice(1)
+            const that = this
+            // 创建函数并返回
+            return function Fn() {
+                // 函数内部将外层保留的this给apply调用函数，判断函数作为构造函数
+                return that.apply(
+                    this instanceof Fn ? this : content,
+                    args.concat(...arguments)
+                )
+            }
+        }
+
+        Function.prototype.myBind2 = function (content) {
+            if (typeof this !== 'function') {
+                return TypeError('not a  function')
+            }
+            const args = [...arguments].slice(1)
+            const that = this
+            return function Fn() {
+                return that.apply(
+                    this instanceof Fn ? this : content,
+                    args.concat(...arguments)
+                )
+            }
+        }
+
+        // test
+        var name = '全局名'
+        function getName() {
+            console.log(this.name)
+        }
+        const obj = {
+            name: '晓红'
+        }
+        getName() // 全局名
+        let test = getName.myBind(obj)() // 晓红
+    </script>
+</body>
+
+</html>

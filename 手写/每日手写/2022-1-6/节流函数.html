@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节流函数</title>
+</head>
+
+<body>
+    <script>
+        window.addEventListener('resize', throttle(function () {
+            console.log('123')
+        }, 500))
+
+        function throttle(fn, wait = 300) {
+            let timer = null
+            return function () {
+                const args = [...arguments]
+                const that = this
+                if (!timer) {
+                    timer = setTimeout(() => {
+                        fn.call(that, args)
+                        timer = null
+                    }, wait)
+                }
+            }
+        }
+
+        // function throttle(fn, wait = 300) {
+        //     let timer = null
+        //     return function () {
+        //         let that = this
+        //         let args = [...arguments]
+        //         if (!timer) {
+        //             timer = setTimeout(() => {
+        //                 fn.call(that, ...args)
+        //                 timer = null
+        //             }, wait)
+        //         }
+        //     }
+        // }
+    </script>
+</body>
+
+</html>
