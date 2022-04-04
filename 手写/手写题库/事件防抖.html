@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件防抖</title>
+</head>
+<body>
+<script>
+    function debounce(fn, delay) {
+        let timer = null
+        return function () {
+            const args = arguments
+            if (timer) {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+                // 改变this指向
+                fn.apply(this, args)
+            }, delay)
+        }
+    }
+
+    // test
+    let num = 0
+    window.addEventListener('resize', debounce(function () {
+        console.log('触发了')
+    }, 300))
+
+</script>
+</body>
+</html>
