@@ -7,13 +7,16 @@
 <body>
 <script>
     function debounce(fn, delay) {
+        // 设置定时器
         let timer = null
+        // 将debounce处理结果当作函数返回
         return function () {
-
             const args = arguments
+            // 每次事件被触发时，都去清除之前的旧定时器
             if (timer) {
                 clearTimeout(timer)
             }
+            // 设立新定时器
             timer = setTimeout(() => {
                 // 改变this指向
                 fn.apply(this, args)
