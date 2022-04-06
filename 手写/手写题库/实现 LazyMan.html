@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            实现一个LazyMan，可以按照以下方式调用:
+            LazyMan(“Hank”)输出:
+            Hi! This is Hank!
+
+            LazyMan(“Hank”).sleep(10).eat(“dinner”)输出
+            Hi! This is Hank!
+            //等待10秒..
+            Wake up after 10
+            Eat dinner~
+
+            LazyMan(“Hank”).eat(“dinner”).eat(“supper”)输出
+            Hi This is Hank!
+            Eat dinner~
+            Eat supper~
+
+            LazyMan(“Hank”).eat(“supper”).sleepFirst(5)输出
+            //等待5秒
+            Wake up after 5
+            Hi This is Hank!
+            Eat supper
+        */
+
+        class _LazyMan {
+            constructor(name) {
+                this.tasks = []
+                const taks = () => {
+                    console.log('Hi! This is' + name + '!')
+                    this.next()
+                }
+                this.tasks.push(taks)
+                setTimeout(() => {
+                    this.next()
+                }, 0)
+            }
+            next() {
+                // 执行任务队列
+                const task = this.tasks.shift()
+                task && task()
+            }
+            sleep(time) {
+                this._sleepWrapper(time, false)
+                return this // 链式调用
+            }
+            sleepFirst(time) {
+                this._sleepWrapper(time, true)
+                return this // 链式调用
+            }
+            _sleepWrapper(time, first) {
+                const task = () => {
+                    setTimeout(() => {
+                        console.log(`Wake up after ${time}`)
+                        this.next()
+                    }, time * 1000)
+                }
+                if (first) {
+                    this.tasks.unshift(task) // 放到队列头部
+                } else {
+                    this.tasks.push(task) // 放到队列尾部
+                }
+            }
+            eat(name) {
+                const task = () => {
+                    console.log(`Eat ${name}`)
+                    this.next()
+                }
+                this.tasks.push(task)
+                return this
+            }
+        }
+
+        // test
+        // function LazyMan(name) {
+        //     return new _LazyMan(name)
+        // }
+        // const t1 = LazyMan('Hank')
+        // const t2 = LazyMan('Hank').sleep(3).eat('dinner')
+        // const t3 = LazyMan('Hank').eat('dinner').eat('supper')
+        // const t4 = LazyMan('Hank').eat('supper').sleepFirst(2)
+        // 等待5秒
+        // Wake up after 5
+        // Hi This is Hank!
+        // Eat supper
+        class _LazyMan2 {
+            constructor(name) {
+                this.tasks = []
+                const task = () => {
+                    console.log('Hi! This is ' + name)
+                    this.next()
+                }
+                this.tasks.push(task)
+                setTimeout(() => {
+                    this.next()
+                }, 0)
+            }
+            next() {
+                const taks = this.tasks.shift()
+                taks && taks()
+            }
+            sleep(time) {
+                this._sleepMethods(time, 'last')
+                return this
+            }
+            sleepFirst(time) {
+                this._sleepMethods(time, 'first')
+                return this
+            }
+            _sleepMethods(time, type) {
+                const task = () => {
+                    setTimeout(() => {
+                        console.log('Wake up after' + time)
+                        this.next()
+                    }, time * 1000)
+                }
+                if (type === 'first') {
+                    this.tasks.unshift(task)
+                } else {
+                    this.tasks.push(task)
+                }
+            }
+            eat(name) {
+                const task = () => {
+                    console.log('Eat ' + name)
+                    this.next()
+                }
+                this.tasks.push(task)
+                return this
+            }
+        }
+
+        function LazyMan2(name) {
+            return new _LazyMan2(name)
+        }
+
+        // const t2 = LazyMan2('Hank').sleep(3).eat('dinner')
+        const t4 = LazyMan2('Hank').eat('supper').sleepFirst(2)
+
+    </script>
+</body>
+
+</html>
