@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    function debounce(fn ,delay) {
+        let timer = null
+        return function () {
+            const that = this,
+                args = arguments;
+            if (timer) {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+                fn.apply(that, args)
+            }, delay)
+        }
+    }
+
+    window.addEventListener('resize', debounce(function () {
+        console.log('执行')
+    }, 1000))
+</script>
+</body>
+</html>

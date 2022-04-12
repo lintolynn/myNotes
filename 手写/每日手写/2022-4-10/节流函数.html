@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    // 方法一使用flag变量
+    // function throttle(fn, delay) {
+    //     let flag = true
+    //     let timer = null
+    //     return function () {
+    //         if (!flag) {
+    //             return
+    //         }
+    //         flag = false
+    //         timer = setTimeout(() => {
+    //             fn.apply(this, arguments)
+    //             flag = true
+    //         }, delay)
+    //         console.log(timer)
+    //     }
+    // }
+
+    // 方法二使用时间戳
+    function throttle(fn, delay) {
+        let lastTime = 0
+        return function () {
+            const now = +new Date()
+            if (now - lastTime >= delay) {
+                lastTime = now
+                fn.apply(this, arguments)
+            }
+        }
+    }
+
+    window.addEventListener('resize', throttle(function () {
+        console.log('执行')
+    }, 1000))
+</script>
+</body>
+</html>
