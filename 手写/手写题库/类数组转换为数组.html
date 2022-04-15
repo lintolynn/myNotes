@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+</ul>
+<script>
+    const getDom = document.querySelectorAll('.item')
+    // console.log(getDom)
+    // getDom.map(item => {
+    //     console.log(item)
+    // })
+
+    // 方法一使用 Array.form
+    const t1 = Array.from(getDom)
+    console.log(t1)
+
+    // 方法二使用 拓展运算符
+    const t2 = [...getDom]
+    console.log(t2)
+
+    // 方法三使用 Array.prototype.slice.call
+    const t3 = Array.prototype.slice.call(getDom)
+    console.log(t3)
+
+    // 方法四使用 Array.prototype.concat.apply
+    const t4 = Array.prototype.concat.apply([], getDom)
+    console.log(t4)
+
+    // 方案五使用 Array.apply
+    // const t5 = Array.apply([] ,getDom)
+    const t5 = Array.apply(null ,getDom)
+    console.log(t5)
+</script>
+</body>
+</html>

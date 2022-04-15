@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function getJSON(url) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.open('GET', url, false)
+            xhr.setRequestHeader('Content-type', 'application/json')
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) {
+                    return
+                }
+                if (xhr.status === 200 || xhr.status === 304) {
+                    return resolve(xhr.responseText)
+                }
+                reject(new Error(xhr.responseText))
+            }
+            xhr.send()
+        })
+    }
+
+    function getJSON2(url) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.open('GET', url, false)
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) {
+                    return
+                }
+                if ([200, 304].includes(xhr.status)) {
+                    return resolve(xhr.responseText)
+                }
+                reject(xhr.responseText)
+            }
+            xhr.send()
+        })
+    }
+</script>
+</body>
+</html>
