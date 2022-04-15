@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 如何取消 promise
+
+        // 实现思路：Promise.race()方法可以用来竞争 Promise  
+        // 可以借助这个特性 自己包装一个 空的 Promise 与要发起的 Promise 来实现
+        // function wrap(pro) {
+        //     // 声明一个空对象
+        //     let obj = {}
+        //     let p1 = new Promise((resolve, reject) => {
+        //         // 执行resolve,和reject
+        //         obj.resolve = resolve
+        //         obj.reject = reject
+        //     })
+        //     // 声明一个包装的promise方法名，使用promise.race将空promise和传入的promise对象进行赛跑
+        //     obj.promise = Promise.race([p1, pro])
+        //     return obj
+        // }
+
+        // // 测试
+        // let testPro = new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve(300)
+        //     }, 300)
+        // })
+
+        // let wrapPro = wrap(testPro)
+        // wrapPro.promise.then((res) => {
+        //     console.log(res)
+        // })
+        // wrapPro.resolve('拦截了')
+
+
+        function wrap(pro) {
+            let obj = {}
+            const p1 = new Promise((resolve, reject) => {
+                obj.resolve = resolve
+                obj.reject = reject
+            })
+            obj.promise = Promise.race([p1, pro])
+            return obj
+        }
+
+        // test
+        let t1 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(300)
+            }, 300)
+        })
+
+        let t2 = wrap(t1)
+        t2.promise.then(res => {
+            console.log(res)
+        })
+        t2.resolve('拦截')
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function compose(...fn) {
+            const total = fn.length
+            if (!total) {
+                return v => v
+            }
+            if (total === 1) {
+                return fn[0]
+            }
+            return function (initVal) {
+                let res = initVal
+                for (let i = 0; i < total; i++) {
+                    res = fn[i](res)
+                }
+                return res
+            }
+        }
+
+        // test
+        function fn1(x) {
+            return x + 1;
+        }
+        function fn2(x) {
+            return x + 2;
+        }
+        function fn3(x) {
+            return x + 3;
+        }
+        function fn4(x) {
+            return x + 4;
+        }
+        const a = compose(fn1, fn2, fn3, fn4);
+        console.log(a(1)); // 1+4+3+2+1=11
+    </script>
+</body>
+
+</html>
