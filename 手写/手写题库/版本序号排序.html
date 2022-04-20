@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            题目描述:有一组版本号如下
+            ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']。
+            现在需要对其进行排序，排序的结果为 
+            ['4.3.5','4.3.4.5','2.3.3','0.302.1','0.1.1']
+        */
+        // function oderSort(arr) {
+        //     return arr.sort((a, b) => {
+        //         // a - b 相当于升序，反之 b - a 是降序
+        //         // 申明一个自增变量，初始值为0
+        //         let i = 0
+        //         // 将版本序号字符串单独转换成一个数组
+        //         const arr1 = a.split('.')
+        //         const arr2 = b.split('.')
+
+        //         while (true) {
+        //             // 遍历获取序号中单独的数字
+        //             const s1 = arr1[i]
+        //             const s2 = arr2[i]
+        //             i++
+        //             // 如果a或者b的值为undefined说明当前s1或s2已无数字可遍历
+        //             if (s1 === undefined || s2 === undefined) {
+        //                 // 进行升序，返回arr1与arr2的长度
+        //                 return arr1.length - arr2.length
+        //             }
+
+        //             if (s1 === s2) {
+        //                 // 如果两项数字相等，跳过当次循环
+        //                 continue;
+        //             }
+
+        //             // 最终返回升序排列后的数组
+        //             return s1 - s2
+        //         }
+
+        //     })
+        // }
+
+        function oderSort(arr) {
+            return arr.sort((a, b) => {
+                const arr1 = a.split('.')
+                const arr2 = b.split('.')
+                let i = 0
+                while (true) {
+                    const s1 = arr1[i]
+                    const s2 = arr2[i]
+                    i++
+                    if (s1 === undefined || s2 === undefined) {
+                        return arr1.length - arr2.length
+                    }
+                    if (s1 === s2) {
+                        continue
+                    }
+                    return s1 - s2
+                }
+            })
+        }
+        // test
+        const test = oderSort([
+            '0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5'
+        ])
+        console.log(test)
+    </script>
+</body>
+
+</html>

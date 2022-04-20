@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请实现 DOM2JSON 一个函数，可以把一个 DOM 节点输出 JSON 的格式</title>
+</head>
+
+<body>
+    <div id="contain">
+        <span><a href=""></a></span>
+        <span><a href=""></a></span>
+    </div>
+    <script>
+        /*
+        题目描述:
+            <div>
+                <span>
+                    <a></a>
+                </span>
+                <span>
+                    <a></a>
+                    <a></a>
+                </span>
+            </div>
+
+            把上诉dom结构转成下面的JSON格式
+
+            {
+                tag: 'DIV',
+                children: [
+                    {
+                    tag: 'SPAN',
+                    children: [
+                        { tag: 'A', children: [] }
+                    ]
+                    },
+                    {
+                    tag: 'SPAN',
+                    children: [
+                        { tag: 'A', children: [] },
+                        { tag: 'A', children: [] }
+                    ]
+                    }
+                ]
+            }
+        */
+
+        function transArray(val) {
+            return Array.from(val)
+        }
+        // function dom2Json(domTree) {
+        //     let obj = {}
+        //     obj.tag = domTree.tagName.toLowerCase()
+        //     obj.children = []
+        //     // domTree.childNodes.forEach(item => obj.children.push(dom2Json(item)))
+        //     transArray(domTree.children).forEach(item => obj.children.push(dom2Json(item)))
+        //     return obj
+        // }
+
+        function dom2Json(domTree) {
+            const obj = {}
+            obj.tag = domTree.tagName
+            obj.children = []
+            transArray(domTree.children).forEach(child => obj.children.push(dom2Json(child)))
+            return obj
+        }
+
+        // test
+        const dom = document.getElementById('contain')
+        const t1 = dom2Json(dom)
+        console.log(dom.children)
+        console.log(t1)
+
+    </script>
+</body>
+
+</html>

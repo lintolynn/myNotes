@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myBind = function (context, args) {
+            if (!context || context == null) {
+                context = window
+            }
+            // let args = [...args].slice(1)
+            fn = this;
+            context[fn] = this
+            return function Fn() {
+                return fn.apply(
+                    this instanceof Fn ? this : context,
+                    args.concat(...arguments)
+                )
+            }
+        }
+    </script>
+</body>
+
+</html>

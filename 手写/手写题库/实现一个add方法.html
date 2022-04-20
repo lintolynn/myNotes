@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function add(...args) {
+        //     let allArgs = [...args];
+        //     function fn(...newArgs) {
+        //         allArgs = [...allArgs, ...newArgs];
+        //         return fn;
+        //     }
+        //     fn.toString = function () {
+        //         if (!allArgs.length) {
+        //             return;
+        //         }
+        //         return allArgs.reduce((sum, cur) => sum + cur);
+        //     };
+        //     return fn;
+        // }
+
+        function add(...args) {
+            // 申明一个所有变量
+            let allArgs = [...args]
+            // 申明一个函数并返回函数本身
+            function fn(...newArgs) {
+                // 将迭代的参数合并
+                allArgs = [...allArgs, ...newArgs]
+                // 返回当前函数
+                return fn
+            }
+            // 重写刚才申明函数的toString方法
+            fn.toString = function () {
+                // 没有值返回
+                if (!allArgs.length) {
+                    return
+                }
+                // 返回计算的总数
+                return allArgs.reduce((pre, cur) => {
+                    return pre + cur
+                })
+            }
+            // 最终返回这个申明的函数
+            return fn
+        }
+
+        // test
+        const t1 = add(1)().toString()
+        const t2 = add(1, 2, 3)(4)().toString()
+        console.log(t1)
+        console.log(t2)
+
+    </script>
+</body>
+
+</html>
