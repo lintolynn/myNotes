@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手写深拷贝考虑Symbol类型</title>
+</head>
+<body>
+<script>
+    // 判断是否为一个对象
+    function isObject(obj) {
+        return obj != null && typeof obj === 'object'
+    }
+
+    // 深拷贝传入拷贝的对象，hash默认为WeakMap
+    function deepClone(data, hash = new WeakMap()) {
+        // 是否为一个对象，如果不是直接返回当前数据
+        if (!isObject(data)) {
+            return data
+        }
+        // 这里是判断当前WeakMap中是否有data中匹配的数据，
+        // 如果有直接就返回无须后面操作
+        if (hash.has(data)) {
+            return hash.get(data)
+        }
+        // 申明一个返回值判断是数组还是对象
+        let target = Array.isArray(data) ? [] : {}
+        // 在WeakMap中保留target的值
+        hash.set(data, target)
+
+        Reflect.ownKeys(data).forEach(key => {
+            const item = data[key]
+            if (isObject(item)) {
+                target[key] = deepClone(item, hash)
+            } else {
+                target[key] = item
+            }
+        })
+
+        return target
+    }
+
+    // function deepClone(obj, hash= new WeakMap()) {
+    //     if (!isObject(obj)) {
+    //         return obj
+    //     }
+    //     if (hash.has(obj)) {
+    //         return hash.get(obj)
+    //     }
+    //     const result = obj instanceof Array ? [] : {}
+    //     hash.set(obj, result)
+    //     Reflect.ownKeys(obj).forEach(key => {
+    //         const item = obj[key]
+    //         if (isObject(item)) {
+    //             result[key] = deepClone(item, hash)
+    //         } else {
+    //             result[key] = item
+    //         }
+    //     })
+    //     return result
+    // }
+
+    // test
+    const testObj = {
+        address: {
+            cite: '北京'
+        },
+        like: Symbol(),
+        name: '小明',
+        age: 19,
+
+    }
+    const t1 = deepClone(testObj)
+    t1.address.cite = '上海'
+    console.log(t1)
+    console.log(testObj)
+    console.log(testObj.like === t1.like)
+</script>
+</body>
+</html>
