@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用 setinterval 模拟实现 settimeout </title>
+</head>
+
+<body>
+    <script>
+        // fn代表外部传入的执行函数，t代表间隔时间
+        const mySetTimeout = (fn, t) => {
+            // 声明保留当前时间timer，使用setInterval
+            const timer = setInterval(() => {
+                // 先清除clearInterval
+                clearInterval(timer)
+                // 再执行传入的执行函数fn
+                fn()
+            }, t)
+        }
+
+        mySetTimeout(() => {
+            console.log(1);
+        }, 1000)
+    </script>
+</body>
+
+</html>

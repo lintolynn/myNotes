@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寄生组合继承</title>
+</head>
+
+<body>
+    <script>
+        function Parent(name) {
+            this.name = name
+            this.say = () => {
+                console.log(this, '父类元素说话')
+            }
+        }
+
+        Parent.prototype.play = () => {
+            console.log('玩一下')
+        }
+
+        function Children(name) {
+            // 将父类构造函数的this指向Children
+            Parent.call(this)
+            this.name = name
+        }
+
+        // Children的原型指向Parent的原型，Object.create不会破坏原有Parent的原型
+        Children.prototype = Object.create(Parent.prototype)
+        // Children原型上的构造器指回Children
+        Children.prototype.constructor = Children
+        // test 
+        const child = new Children('小明')
+        console.log(child.name)
+        child.say()
+        child.play()
+    </script>
+</body>
+
+</html>
