@@ -21,6 +21,8 @@
         */
 
         function render(template, data) {
+            // 核心使用replace函数进行正则匹配，
+            // \代表转译，+配置一次或多次，w匹配任意单词字符，
             const computed = template.replace(/\{\{(\+w)\}\}/g, function (match, key) {
                 return data[key]
             })
