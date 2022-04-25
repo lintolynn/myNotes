@@ -1,10 +1,126 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>将虚拟 Dom 转化为真实 Dom</title>
 </head>
 <body>
-$END$
+<script>
+    // 题目描述:JSON 格式的虚拟 Dom 怎么转换成真实 Dom
+    /*
+    * {
+          tag: 'DIV',
+          attrs:{
+          id:'app'
+          },
+          children: [
+            {
+              tag: 'SPAN',
+              children: [
+                { tag: 'A', children: [] }
+              ]
+            },
+            {
+              tag: 'SPAN',
+              children: [
+                { tag: 'A', children: [] },
+                { tag: 'A', children: [] }
+              ]
+            }
+          ]
+        }
+        把上诉虚拟Dom转化成下方真实Dom
+        <div id="app">
+          <span>
+            <a></a>
+          </span>
+          <span>
+            <a></a>
+            <a></a>
+          </span>
+        </div>
+    * */
+
+    function _render(vnode) {
+        // 如果是数字类型就转换为字符串
+        if (typeof vnode === 'number') {
+            vnode = String(vnode)
+        }
+        // 如果是字符串类型就文本节点直接返回
+        if (typeof vnode === 'string') {
+            return document.createTextNode(vnode)
+        }
+        // 创建dom节点
+        const dom = document.createElement(vnode.tag)
+        // 如果有节点属性，那么创建节点属性
+        if (vnode.attrs) {
+            Object.keys(vnode.attrs).forEach(key => {
+                dom.setAttribute(key, vnode.attrs[key])
+            })
+        }
+        if (vnode.text) {
+            dom.innerHTML = vnode.text
+        }
+        // 如果有子节点遍历子节点，采用递归调用返回的dom，将子节点插入父节点
+        vnode.children.forEach(child => {
+            dom.appendChild(_render(child))
+        })
+        // 返回生成的元素
+        return dom
+    }
+
+    // function _render(vnode) {
+    //     if (typeof vnode === 'number') {
+    //         vnode = String(vnode)
+    //     }
+    //     if (typeof vnode === 'string') {
+    //         return document.createTextNode(vnode)
+    //     }
+    //     const dom = document.createElement(vnode.tag)
+    //     if (vnode.attrs) {
+    //         Object.keys(vnode.attrs).forEach(key => {
+    //             dom.setAttribute(key, vnode.attrs[key])
+    //         })
+    //     }
+    //     if (vnode.text) {
+    //         dom.innerHTML = vnode.text
+    //     }
+    //     vnode.children.forEach(child => {
+    //         dom.appendChild(_render(child))
+    //     })
+    //     return dom
+    // }
+
+    // test
+    const test = {
+        tag: 'DIV',
+        attrs:{
+            id:'app'
+        },
+        text: '小明',
+        children: [
+            {
+                tag: 'SPAN',
+                text: '小明的第一个孩子',
+                children: [
+                    { tag: 'A', children: [] }
+                ]
+            },
+            {
+                tag: 'SPAN',
+                children: [
+                    { tag: 'A', children: [] },
+                    { tag: 'A', children: [] }
+                ]
+            }
+        ]
+    }
+    const t1 = _render(test)
+    console.log(t1)
+    const t2 = _render(1)
+    console.log(t2)
+    const t3 = _render('小红')
+    console.log(t3)
+</script>
 </body>
 </html>

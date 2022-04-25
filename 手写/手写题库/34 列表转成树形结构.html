@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>34 列表转成树形结构</title>
+</head>
+<body>
+<script>
+    /*
+    * 题目描述:
+    * [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0 //这里用0表示为顶级节点
+            },
+            {
+                id: 2,
+                text: '节点1_1',
+                parentId: 1 //通过这个字段来确定子父级
+            }
+            ...
+        ]
+
+        转成
+        [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0,
+                children: [
+                    {
+                        id:2,
+                        text: '节点1_1',
+                        parentId:1
+                    }
+                ]
+            }
+        ]
+    *
+    * */
+
+    function transformTree(data) {
+        if (!data || !data.length) {
+            return []
+        }
+        // 申明
+        const newArr = [],
+            temp = {}
+        data.forEach(item => {
+            temp[item.id] = item
+        })
+
+        Object.keys(temp).forEach(key => {
+            const item = temp[key],
+                parentId = item.parentId
+            if (parentId === 0) {
+                newArr.push(item)
+            } else {
+                if (!temp[parentId].children) {
+                    temp[parentId].children = []
+                }
+                temp[parentId].children.push(item)
+            }
+        })
+
+        return newArr
+    }
+
+    const listData = [
+        {
+            id: 1,
+            text: '节点1',
+            parentId: 0 //这里用0表示为顶级节点
+        },
+        {
+            id: 11,
+            text: '节点1_2',
+            parentId: 1 //通过这个字段来确定子父级
+        },
+        {
+            id: 12,
+            text: '节点1_2',
+            parentId: 1 //通过这个字段来确定子父级
+        },
+    ]
+
+    // listData
+    const t1 = transformTree(listData)
+    console.log(t1)
+
+</script>
+</body>
+</html>
