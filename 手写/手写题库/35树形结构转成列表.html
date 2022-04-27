@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>树形结构转成列表</title>
+</head>
+<body>
+<script>
+    /*
+    * [
+        {
+            id: 1,
+            text: '节点1',
+            parentId: 0,
+            children: [
+                {
+                    id:2,
+                    text: '节点1_1',
+                    parentId:1
+                }
+            ]
+        }
+       ]
+    转成
+        [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0 //这里用0表示为顶级节点
+            },
+            {
+                id: 2,
+                text: '节点1_1',
+                parentId: 1 //通过这个字段来确定子父级
+            }
+        ]
+    *
+    * */
+
+    function treeToList(data) {
+        // 申明返回一个结果的数组
+        const res = []
+        // 申明一个递归函数
+        const fn = (tree) => {
+            // 将当前的数组进行遍历
+            tree.forEach(item => {
+                // 如果有children属性
+                const child = item.children
+                if (child) {
+                    // 递归遍历
+                    fn(child)
+                    // 递归之后删除children属性
+                    delete item.children
+                }
+                // 将每一项放入数组中
+                res.push(item)
+            })
+        }
+        // 第一次调用
+        fn(data)
+        // 返回结果
+        return res
+    }
+
+    // test
+    const testData = [
+        {
+            id: 1,
+            text: '节点1',
+            parentId: 0,
+            children: [
+                {
+                    id: 11,
+                    text: '节点1_1',
+                    parentId: 1
+                }
+            ]
+        },
+        {
+            id: 2,
+            text: '节点2',
+            parentId: 0,
+            children: [
+                {
+                    id: 21,
+                    text: '节点2_1',
+                    parentId: 2
+                }
+            ]
+        }
+    ]
+    debugger
+    const t1 = treeToList(testData)
+    console.log(t1)
+</script>
+</body>
+</html>
