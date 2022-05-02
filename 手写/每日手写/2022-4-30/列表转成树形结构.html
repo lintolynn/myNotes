@@ -1,10 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+<script>
+    /*
+    * [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0 //这里用0表示为顶级节点
+            },
+            {
+                id: 2,
+                text: '节点1_1',
+                parentId: 1 //通过这个字段来确定子父级
+            }
+       ]
+
+        转成
+        [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0,
+                children: [
+                    {
+                        id:2,
+                        text: '节点1_1',
+                        parentId:1
+                    }
+                ]
+            }
+        ]
+
+    * */
+    const obj = [
+        {
+            id: 1,
+            parentId: 0,
+            name: 'body'
+        }, {
+            id: 2,
+            parentId: 1,
+            name: 'title'
+        }, {
+            id: 3,
+            parentId: 2,
+            name: 'div'
+        }
+    ]
+
+    // 方法二
+    function listToTree(data) {
+        if (!(data instanceof Array)) {
+            return
+        }
+        const res = []
+        const obj = {}
+        data.forEach(item => {
+            obj[item.id] = item
+        })
+        data.forEach(item => {
+            const parent = obj[item.parentId]
+            if (parent) {
+                if (!parent.children) {
+                    parent.children = []
+                }
+                parent.children.push(item)
+            } else {
+                res.push(item)
+            }
+        })
+        return res
+    }
+    const t1 = listToTree(obj)
+
+    // 方法三
+    function fn(data, parentId) {
+        let result = [], temp;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].parentId === parentId) {
+                let obj = {
+                    text: data[i].name,
+                    id: data[i].id,
+                    parentId: data[i].parentId
+                }
+                temp = fn(data, data[i].id);
+                if (temp.length > 0) {
+                    obj.children = temp;
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    }
+    const t2 = fn(obj, 0)
+    console.log(t2)
+</script>
 </body>
 </html>

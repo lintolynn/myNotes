@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>树形结构转成列表</title>
 </head>
+
 <body>
 <script>
     /*
-    * [
-        {
-            id: 1,
-            text: '节点1',
-            parentId: 0,
-            children: [
-                {
-                    id:2,
-                    text: '节点1_1',
-                    parentId:1
-                }
-            ]
-        }
-       ]
-    转成
-        [
+        * [
             {
                 id: 1,
                 text: '节点1',
-                parentId: 0 //这里用0表示为顶级节点
-            },
-            {
-                id: 2,
-                text: '节点1_1',
-                parentId: 1 //通过这个字段来确定子父级
+                parentId: 0,
+                children: [
+                    {
+                        id:2,
+                        text: '节点1_1',
+                        parentId:1
+                    }
+                ]
             }
-        ]
-    *
-    * */
+           ]
+        转成
+            [
+                {
+                    id: 1,
+                    text: '节点1',
+                    parentId: 0 //这里用0表示为顶级节点
+                },
+                {
+                    id: 2,
+                    text: '节点1_1',
+                    parentId: 1 //通过这个字段来确定子父级
+                }
+            ]
+        *
+        * */
 
     function treeToList(data) {
         // 申明返回一个结果的数组
@@ -62,36 +64,48 @@
         return res
     }
 
-    // test
-    const testData = [
-        {
-            id: 1,
-            text: '节点1',
-            parentId: 0,
-            children: [
-                {
-                    id: 11,
-                    text: '节点1_1',
-                    parentId: 1
-                }
-            ]
-        },
-        {
-            id: 2,
-            text: '节点2',
-            parentId: 0,
-            children: [
-                {
-                    id: 21,
-                    text: '节点2_1',
-                    parentId: 2
-                }
-            ]
+    function treeTolist2(tree) {
+        if (!tree || !tree.length) {
+            return []
         }
-    ]
-    debugger
-    const t1 = treeToList(testData)
-    console.log(t1)
+        let result = []
+        const fn = (data) => {
+            data.forEach(item => {
+                if (item.children) {
+                    fn(item.children)
+                    delete item.children
+                }
+                result.push(item)
+            })
+        }
+        fn(tree)
+        return result
+    }
+
+    // test
+    const testData = [{
+        id: 1,
+        text: '节点1',
+        parentId: 0,
+        children: [{
+            id: 11,
+            text: '节点1_1',
+            parentId: 1
+        }]
+    }, {
+        id: 2,
+        text: '节点2',
+        parentId: 0,
+        children: [{
+            id: 21,
+            text: '节点2_1',
+            parentId: 2
+        }]
+    }]
+    // const t1 = treeToList(testData)
+    // console.log(t1)
+    console.log(treeTolist2(testData))
 </script>
 </body>
+
 </html>

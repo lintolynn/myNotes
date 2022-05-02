@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>34 列表转成树形结构</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
+
 <body>
 <script>
     /*
@@ -67,28 +71,75 @@
         return newArr
     }
 
-    const listData = [
-        {
-            id: 1,
-            text: '节点1',
-            parentId: 0 //这里用0表示为顶级节点
-        },
-        {
-            id: 11,
-            text: '节点1_2',
-            parentId: 1 //通过这个字段来确定子父级
-        },
-        {
-            id: 12,
-            text: '节点1_2',
-            parentId: 1 //通过这个字段来确定子父级
-        },
-    ]
+    const listData = [{
+        id: 1,
+        text: '节点1',
+        parentId: 0 //这里用0表示为顶级节点
+    }, {
+        id: 11,
+        text: '节点1_2',
+        parentId: 1 //通过这个字段来确定子父级
+    }, {
+        id: 12,
+        text: '节点1_2',
+        parentId: 1 //通过这个字段来确定子父级
+    },]
 
     // listData
     const t1 = transformTree(listData)
     console.log(t1)
 
+    // 方法二
+    function listToTree(data) {
+        if (!(data instanceof Array)) {
+            return
+        }
+        const res = []
+        const obj = {}
+        data.forEach(item => {
+            obj[item.id] = item
+        })
+        data.forEach(item => {
+            const parent = obj[item.parentId]
+            if (parent) {
+                if (!parent.children) {
+                    parent.children = []
+                }
+                parent.children.push(item)
+            } else {
+                res.push(item)
+            }
+        })
+        return res
+    }
+
+    const t2 = listToTree(listData)
+    console.log(t2)
+
+    // 方法三
+    function fn(data, parentId) {
+        let result = [],
+            temp;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].parentId === parentId) {
+                let obj = {
+                    text: data[i].text,
+                    id: data[i].id,
+                    parentId: data[i].parentId
+                }
+                temp = fn(data, data[i].id);
+                if (temp.length > 0) {
+                    obj.children = temp;
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    }
+
+    const t3 = fn(listData, 0)
+    console.log(t3)
 </script>
 </body>
+
 </html>

@@ -1,10 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>36大数相加</title>
 </head>
 <body>
-$END$
+<script>
+    /*
+        题目描述:实现一个add方法完成两个大数相加
+
+        let a = "9007199254740991";
+        let b = "1234567899999999999";
+
+        function add(a ,b){
+            //...
+        }
+    * */
+    function add(a, b) {
+        // 取两个数字的最大长度
+        const maxLength = Math.max(a.length, b.length)
+        // 用0分别去补齐a和b的长度
+        a = a.padStart(maxLength, 0)
+        b = b.padStart(maxLength, 0)
+        // 定义加法过程中需要用到的变量
+        let t = 0
+        let f = 0 // 进位
+        let sum = ''
+        const total = maxLength - 1
+        // 倒叙循环
+        for (let i = total; i >= 0; i--) {
+            t = parseInt(a[i]) + parseInt(b[i]) + f
+            // 判断进位,满10进1
+            f = Math.floor(t/10)
+            // 保留余数
+            t = t % 10
+            // 注意：每一步算出来的结果需要放在右边上。
+            sum = t + sum
+        }
+        // if (f !== 0) {
+        //     sum = '' + f + sum
+        // }
+        if (f === 1) {
+            sum = '1' + sum
+        }
+        return sum
+    }
+
+    function add2(a, b) {
+        const maxLength = Math.max(a.length, b.length)
+        a = a.padStart(maxLength, 0)
+        b = b.padStart(maxLength, 0)
+        let t = 0
+        let f = 0 // 进位
+        let sum = ''
+        const total = maxLength - 1
+        for (let i = total; i >= 0; i--) {
+            t = parseInt(a[i]) + parseInt(b[i]) + f
+            f = Math.floor(t / 10)
+            t = t % 10
+            sum = t + sum
+        }
+        if (f === 1) {
+            sum = '1' + sum
+        }
+        return sum
+    }
+
+    let a = "9007199254740991";
+    let b = "1234567899999999999";
+    const t1 = add(a, b)
+    console.log(t1)
+    const t2 = add2(a, b)
+    console.log(t2)
+</script>
 </body>
 </html>
