@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手写一个promise</title>
+</head>
+<body>
+<script>
+
+    class MyPromise {
+        // 1. 传入fn，并执行fn
+        // 2. fn接收两个参数，resolve成功回调，reject失败回调
+        // 3. 定义resolve成功回调函数，reject失败回调函数
+        // 4. 声明state状态,value,reason全家变量，
+        // 5. 在resolve成功回调函数中改变状态，保留回调参数，reject失败回调同理
+        // 6. 定义then函数，传入成功和失败函数，定义then状态下成功的回调数组和失败回调的数组
+        // 7. 在resolve成功回调函数和reject失败回调函数中分别遍历执行，then中的成功和失败回调，并传递参数
+        
+        state = 'pending' // 三种状态 pending fulfilled rejected
+        value = undefined // 成功后的值
+        reason = undefined // 失败后的原因
+
+        // 添加then方法
+        resolveCallbacks = [] // pending状态下，存储成功的回调
+        rejectCallbacks = [] // pending状态下，存储失败的回调
+
+        constructor(fn) {
+            // 成功回调
+            const resolveHandler = (value) => {
+                if (this.state === 'pending') {
+                    this.state = 'fulfilled'
+                    this.value = value
+                    // 添加then方法
+                    this.resolveCallbacks.forEach(fn => fn(this.value))
+                }
+            }
+
+            // 失败回调
+            const rejectHandler = (reason) => {
+                if (this.state === 'pending') {
+                    this.state = 'rejected'
+                    this.reason = reason
+                    // 添加then方法
+                    this.rejectCallbacks.forEach(fn => fn(this.reason))
+                }
+            }
+
+            // 监听错误信息
+            try {
+                // fn
+                fn(resolveHandler, rejectHandler)
+            } catch (err) {
+                rejectHandler(err)
+            }
+        }
+
+        // then方法传入两个函数一个成功，一个失败
+        then(fn1, fn2) {
+            // 当 pending状态下，fn1 fn2 会被存储到 callbacks 中
+        }
+    }
+
+    // test
+    const p1 = new MyPromise((resolve, reject) => {
+        // resolve(100)
+        // reject('错误信息')
+        setTimeout(() => {
+            resolve(100)
+        }, 500)
+    })
+    console.log(p1)
+
+    // const p11 = p1.then(data => {
+    //     return data + 1
+    // })
+    // const p12 = p11.then(data => {
+    //     return data + 2
+    // })
+    // const p13 = p12.catch(err => console.err(err))
+
+    // const p2 = MyPromise.resolve(200)
+    // const p3 = MyPromise.reject('错误信息')
+    // const p4 = MyPromise.all([p1, p2])
+    // const p5 = MyPromise.race([p1, p2])
+</script>
+</body>
+</html>
