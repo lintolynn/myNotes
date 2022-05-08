@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现Promise.catch</title>
+</head>
+<body>
+<script>
+    // class MyPromise {
+    //     state = 'pending' // 三种状态 pending fulfilled rejected
+    //     value = undefined // 成功后的值
+    //     reason = undefined // 失败后的原因
+    //
+    //     // 添加then方法
+    //     resolveCallbacks = [] // pending状态下，存储成功的回调
+    //     rejectCallbacks = [] // pending状态下，存储失败的回调
+    //
+    //     constructor(fn) {
+    //         // 成功回调
+    //         const resolveHandler = (value) => {
+    //             if (this.state === 'pending') {
+    //                 this.state = 'fulfilled'
+    //                 this.value = value
+    //                 // 添加then方法
+    //                 this.resolveCallbacks.forEach(fn => fn(this.value))
+    //             }
+    //         }
+    //
+    //         // 失败回调
+    //         const rejectHandler = (reason) => {
+    //             if (this.state === 'pending') {
+    //                 this.state = 'rejected'
+    //                 this.reason = reason
+    //                 // 添加then方法
+    //                 this.rejectCallbacks.forEach(fn => fn(this.reason))
+    //             }
+    //         }
+    //
+    //         // 监听错误信息
+    //         try {
+    //             // fn
+    //             fn(resolveHandler, rejectHandler)
+    //         } catch (err) {
+    //             rejectHandler(err)
+    //         }
+    //     }
+    //
+    //     // then方法传入两个函数一个成功，一个失败
+    //     then(fn1, fn2) {
+    //         // 当 pending状态下，fn1 fn2 会被存储到 callbacks 中
+    //         // 传入的是函数，直接返回函数
+    //         fn1 = typeof fn1 === 'function' ? fn1 : v => v
+    //         fn2 = typeof fn2 === 'function' ? fn2 : err => err
+    //
+    //         // 此时有三步操作
+    //         if (this.state === 'pending') {
+    //             // 1 返回新的Promise
+    //             // 2 将fn1存储到resolveCallbacks中，注意使用try catch包裹起来
+    //             // 3 将fn2存储到rejectCallbacks中，同样使用try catch包裹起来
+    //             return new MyPromise((resolve, reject) => {
+    //                 this.resolveCallbacks.push(() => {
+    //                     try {
+    //                         resolve(fn1(this.value))
+    //                     } catch (err) {
+    //                         reject(err)
+    //                     }
+    //                 })
+    //                 this.rejectCallbacks.push(() => {
+    //                     try {
+    //                         reject(fn2(this.reason))
+    //                     } catch (err) {
+    //                         reject(err)
+    //                     }
+    //                 })
+    //             })
+    //         }
+    //
+    //         if (this.state === 'fulfilled') {
+    //             // 1 返回新的Promise,使用try,catch包裹
+    //             // 2 执行fn1时传入当前的value
+    //             // 3 返回新的value
+    //             const p1 = new MyPromise((resolve, reject) => {
+    //                 try {
+    //                     const newVal = fn1(this.value)
+    //                     resolve(newVal)
+    //                 } catch (e) {
+    //                     reject(e)
+    //                 }
+    //             })
+    //             return p1
+    //         }
+    //
+    //         if (this.state === 'rejected') {
+    //             // 1 返回新的Promise，使用try catch包裹
+    //             // 2 执行fn2时传入当前的reason
+    //             // 返回新的reason
+    //             return new MyPromise((resolve, reject) => {
+    //                 try {
+    //                     reject(fn2(this.reason))
+    //                 } catch (err) {
+    //                     reject(err)
+    //                 }
+    //             })
+    //         }
+    //     }
+    //
+    //     // catch就是 then 的一个语法糖，简单模式
+    //     catch(fn) {
+    //         return this.then(null, fn)
+    //     }
+    // }
+
+    class MyPromise {
+
+        state = 'pending'
+        value = ''
+        reason = ''
+        resolveCallbacks = []
+        rejectCallbacks = []
+
+        constructor(fn) {
+            const resolveHandle = (value) => {
+                if (this.state === 'pending') {
+                    this.state = 'fulfilled'
+                    this.value = value
+                    this.resolveCallbacks.forEach(fn => fn(this.value))
+                }
+            }
+
+            const rejectHandle = (reason) => {
+                if (this.state === 'pending') {
+                    this.state = 'rejected'
+                    this.reason = reason
+                    this.rejectCallbacks.forEach(fn => fn(this.reason))
+                }
+            }
+
+            try {
+                fn(resolveHandle, rejectHandle)
+            } catch (err) {
+                rejectHandle(err)
+            }
+        }
+
+        then(fn1, fn2) {
+            fn1 = typeof fn1 === 'function' ? fn1 : v => v
+            fn2 = typeof fn2 === 'function' ? fn2 : err => err
+
+            if (this.state === 'pending') {
+                return new MyPromise((resolve, reject) => {
+                    this.resolveCallbacks.push(() => {
+                        try {
+                            resolve(fn1(this.value))
+                        } catch (err) {
+                            reject(err)
+                        }
+                    })
+                    this.rejectCallbacks.push(() => {
+                        try {
+                            reject(fn2(this.reason))
+                        } catch (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+
+            if (this.state === 'fulfilled') {
+                return new MyPromise((resolve, reject) => {
+                    try {
+                        resolve(fn1(this.value))
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            }
+
+            if (this.state === 'rejected') {
+                return new MyPromise((resolve, reject) => {
+                    try {
+                        reject(fn2(this.reason))
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            }
+
+        }
+        catch(fn) {
+            return this.then(null, fn)
+        }
+    }
+
+    // test
+    const p1 = new MyPromise((resolve, reject) => {
+        // resolve(100)
+        reject('错误')
+        // setTimeout(() => {
+        //     resolve(100)
+        // }, 500)
+    })
+
+    const p11 = p1.then(data => {
+        console.log('data1', data)
+        return data + 1
+    })
+    const p12 = p11.then(data => {
+        console.log('data2', data)
+        return data + 2
+    })
+    const p13 = p12.catch(err => console.error(err))
+</script>
+</body>
+</html>

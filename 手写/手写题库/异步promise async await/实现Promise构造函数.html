@@ -15,7 +15,7 @@
         // 5. 在resolve成功回调函数中改变状态，保留回调参数，reject失败回调同理
         // 6. 定义then函数，传入成功和失败函数，定义then状态下成功的回调数组和失败回调的数组
         // 7. 在resolve成功回调函数和reject失败回调函数中分别遍历执行，then中的成功和失败回调，并传递参数
-        
+
         state = 'pending' // 三种状态 pending fulfilled rejected
         value = undefined // 成功后的值
         reason = undefined // 失败后的原因
