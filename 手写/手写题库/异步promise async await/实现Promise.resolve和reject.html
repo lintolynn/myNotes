@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现Promise.resolve和reject</title>
+</head>
+<body>
+<script>
+  class MyPromise {
+      state = 'pending' // 三种状态 pending fulfilled rejected
+      value = undefined // 成功后的值
+      reason = undefined // 失败后的原因
+
+      // 添加then方法
+      resolveCallbacks = [] // pending状态下，存储成功的回调
+      rejectCallbacks = [] // pending状态下，存储失败的回调
+
+      constructor(fn) {
+          // 成功回调
+          const resolveHandler = (value) => {
+              if (this.state === 'pending') {
+                  this.state = 'fulfilled'
+                  this.value = value
+                  // 添加then方法
+                  this.resolveCallbacks.forEach(fn => fn(this.value))
+              }
+          }
+
+          // 失败回调
+          const rejectHandler = (reason) => {
+              if (this.state === 'pending') {
+                  this.state = 'rejected'
+                  this.reason = reason
+                  // 添加then方法
+                  this.rejectCallbacks.forEach(fn => fn(this.reason))
+              }
+          }
+
+          // 监听错误信息
+          try {
+              // fn
+              fn(resolveHandler, rejectHandler)
+          } catch (err) {
+              rejectHandler(err)
+          }
+      }
+
+      // then方法传入两个函数一个成功，一个失败
+      then(fn1, fn2) {
+          // 当 pending状态下，fn1 fn2 会被存储到 callbacks 中
+          // 传入的是函数，直接返回函数
+          fn1 = typeof fn1 === 'function' ? fn1 : v => v
+          fn2 = typeof fn2 === 'function' ? fn2 : err => err
+
+          // 此时有三步操作
+          if (this.state === 'pending') {
+              // 1 返回新的Promise
+              // 2 将fn1存储到resolveCallbacks中，注意使用try catch包裹起来
+              // 3 将fn2存储到rejectCallbacks中，同样使用try catch包裹起来
+              return new MyPromise((resolve, reject) => {
+                  this.resolveCallbacks.push(() => {
+                      try {
+                          resolve(fn1(this.value))
+                      } catch (err) {
+                          reject(err)
+                      }
+                  })
+                  this.rejectCallbacks.push(() => {
+                      try {
+                          reject(fn2(this.reason))
+                      } catch (err) {
+                          reject(err)
+                      }
+                  })
+              })
+          }
+
+          if (this.state === 'fulfilled') {
+              // 1 返回新的Promise,使用try,catch包裹
+              // 2 执行fn1时传入当前的value
+              // 3 返回新的value
+              const p1 = new MyPromise((resolve, reject) => {
+                  try {
+                      const newVal = fn1(this.value)
+                      resolve(newVal)
+                  } catch (e) {
+                      reject(e)
+                  }
+              })
+              return p1
+          }
+
+          if (this.state === 'rejected') {
+              // 1 返回新的Promise，使用try catch包裹
+              // 2 执行fn2时传入当前的reason
+              // 返回新的reason
+              return new MyPromise((resolve, reject) => {
+                  try {
+                      reject(fn2(this.reason))
+                  } catch (err) {
+                      reject(err)
+                  }
+              })
+          }
+      }
+
+      // catch就是 then 的一个语法糖，简单模式
+      catch(fn) {
+          return this.then(null, fn)
+      }
+  }
+
+  // 其实就是语法糖,同步的简写形式
+  MyPromise.resolve = function (value) {
+    return new MyPromise((resolve, reject) => resolve(value))
+  }
+  MyPromise.reject = function (reason) {
+    return new MyPromise((resolve, reject) => reject(reason))
+  }
+
+  // test
+  const p2 = new MyPromise.resolve(200)
+  const p3 = new MyPromise.reject('err info')
+  console.log(p2)
+  console.log(p3)
+</script>
+</body>
+</html>
