@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+  class MyPromise {
+    state = 'pending' // 三种状态 pending fulfilled rejected
+    value = undefined // 成功后的值
+    reason = undefined // 失败后的原因
+
+    // 添加then方法
+    resolveCallbacks = [] // pending状态下，存储成功的回调
+    rejectCallbacks = [] // pending状态下，存储失败的回调
+
+    constructor(fn) {
+      // 成功回调
+      const resolveHandler = (value) => {
+        if (this.state === 'pending') {
+          this.state = 'fulfilled'
+          this.value = value
+          // 添加then方法
+          this.resolveCallbacks.forEach(fn => fn(this.value))
+        }
+      }
+
+      // 失败回调
+      const rejectHandler = (reason) => {
+        if (this.state === 'pending') {
+          this.state = 'rejected'
+          this.reason = reason
+          // 添加then方法
+          this.rejectCallbacks.forEach(fn => fn(this.reason))
+        }
+      }
+
+      // 监听错误信息
+      try {
+        // fn
+        fn(resolveHandler, rejectHandler)
+      } catch (err) {
+        rejectHandler(err)
+      }
+    }
+
+    // then方法传入两个函数一个成功，一个失败
+    then(fn1, fn2) {
+      // 当 pending状态下，fn1 fn2 会被存储到 callbacks 中
+      // 传入的是函数，直接返回函数
+      fn1 = typeof fn1 === 'function' ? fn1 : v => v
+      fn2 = typeof fn2 === 'function' ? fn2 : err => err
+
+      // 此时有三步操作
+      if (this.state === 'pending') {
+        // 1 返回新的Promise
+        // 2 将fn1存储到resolveCallbacks中，注意使用try catch包裹起来
+        // 3 将fn2存储到rejectCallbacks中，同样使用try catch包裹起来
+        return new MyPromise((resolve, reject) => {
+          this.resolveCallbacks.push(() => {
+            try {
+              resolve(fn1(this.value))
+            } catch (err) {
+              reject(err)
+            }
+          })
+          this.rejectCallbacks.push(() => {
+            try {
+              reject(fn2(this.reason))
+            } catch (err) {
+              reject(err)
+            }
+          })
+        })
+      }
+
+      if (this.state === 'fulfilled') {
+        // 1 返回新的Promise,使用try,catch包裹
+        // 2 执行fn1时传入当前的value
+        // 3 返回新的value
+        const p1 = new MyPromise((resolve, reject) => {
+          try {
+            const newVal = fn1(this.value)
+            resolve(newVal)
+          } catch (e) {
+            reject(e)
+          }
+        })
+        return p1
+      }
+
+      if (this.state === 'rejected') {
+        // 1 返回新的Promise，使用try catch包裹
+        // 2 执行fn2时传入当前的reason
+        // 返回新的reason
+        return new MyPromise((resolve, reject) => {
+          try {
+            reject(fn2(this.reason))
+          } catch (err) {
+            reject(err)
+          }
+        })
+      }
+    }
+
+    // catch就是 then 的一个语法糖，简单模式
+    catch(fn) {
+      return this.then(null, fn)
+    }
+  }
+
+  // Promise.all 传入一个promise数组，当数组中所有promise的状态都是 fulfilled后，就返回新的promise，包含前面所有的结果
+  // Promise.race 传入一个Promise数组，只有一个promise数组中状态是 fulfilled 后，即返回结果
+
+  MyPromise.resolve = function (value) {
+    return new MyPromise((resolve, reject) => resolve(value))
+  }
+  MyPromise.reject = function (reason) {
+    return new MyPromise((resolve, reject) => reject(reason))
+  }
+
+  MyPromise.all = function (promiseList = []) {
+    // 返回一个新的promise
+    return new MyPromise((resolve, reject) => {
+      // 分别申明返回结果，promise数组总数，当前的值
+      const result = []
+      const total = promiseList.length
+      let count = 0
+      // 循环遍历传入的promise数组
+      promiseList.forEach(p => {
+        p.then(res => {
+          // then回调中，将结果添加到返回数组中
+          result.push(res)
+          // 每执行完一次，让临时变量+1
+          count++
+          // 如果当前临时变量 等于 promise数组总数证明异步任务列队执行完成
+          if (count === total) {
+            // 返回结果
+            resolve(result)
+          }
+        }).catch(err => {
+          // 错误直接返回错误结果
+          reject(err)
+        })
+      })
+    })
+  }
+
+  MyPromise.race = function(promiseList = []) {
+    // 声明一个执行完成的变量
+    let flag = false
+    // 返回一个promise
+    return new MyPromise((resolve, reject) => {
+      // 循环遍历传入的promise数组
+      promiseList.forEach(p => {
+        p.then(res => {
+          // then回调中判断flag变量是否执行过resolve
+          if (!flag) {
+            // 返回
+            resolve(res)
+            // 变量关闭
+            flag = true
+          }
+        }).catch(err => {
+          // 返回错误信息
+          reject(err)
+        })
+      })
+    })
+  }
+
+  // test
+  const t1 = MyPromise.resolve(100)
+  const t2 = MyPromise.resolve(200)
+  const t3 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(300)
+    }, 2000)
+  })
+  // const t4 = MyPromise.reject('错误信息')
+  // const params = [t1, t2, t3, t4]
+  const params = [t1, t2, t3]
+
+  const p1 = MyPromise.all(params).then(res => {
+    console.log(res)
+  })
+
+  const p2 = MyPromise.race(params)
+  p2.then(res => console.log('race res', res))
+</script>
+</body>
+</html>
