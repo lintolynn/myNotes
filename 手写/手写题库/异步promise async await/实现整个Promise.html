@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现整个Promise</title>
+</head>
+<body>
+<script>
+    class MyPromise {
+
+        state = 'pending'
+        value = ''
+        reason = ''
+        resolveCallbacks = []
+        rejectedCallbacks = []
+
+        constructor(fn) {
+
+            const resolveHandle = (value) => {
+                if (this.state === 'pending') {
+                    this.state = 'fulfilled'
+                    this.value = value
+                    this.resolveCallbacks.forEach(fn => fn(this.value))
+                }
+            }
+
+            const rejectHandle = (reason) => {
+                if (this.state === 'pending') {
+                    this.state = 'rejected'
+                    this.reason = reason
+                    this.rejectedCallbacks.forEach(fn => fn(this.reason))
+                }
+            }
+
+            try {
+                fn(resolveHandle, rejectHandle)
+            } catch (err) {
+                rejectHandle(err)
+            }
+        }
+
+        then(fn1, fn2) {
+            fn1 = typeof fn1 === 'function' ? fn1 : v => v
+            fn2 = typeof fn2 === 'function' ? fn2 : e => e
+
+            if (this.state === 'pending') {
+                return new MyPromise((resolve, reject) => {
+                    this.resolveCallbacks.push(() => {
+                        try {
+                            resolve(fn1(this.value))
+                        } catch (err) {
+                            reject(err)
+                        }
+                    })
+                    this.rejectedCallbacks.push(() => {
+                        try {
+                            reject(fn2(this.reason))
+                        } catch (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+
+            if (this.state === 'fulfilled') {
+                return new MyPromise((resolve, reject) => {
+                    try {
+                        resolve(fn1(this.value))
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            }
+
+            if (this.state === 'rejected') {
+                return new MyPromise((resolve, reject) => {
+                    try {
+                        reject(fn2(this.reason))
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            }
+
+        }
+
+        catch(fn) {
+            return this.then(null, fn)
+        }
+    }
+
+    MyPromise.resolve = function (value) {
+        return new MyPromise((resolve, reject) => resolve(value))
+    }
+    MyPromise.reject = function (reason) {
+        return new MyPromise((resolve, reject) => reject(reason))
+    }
+
+    MyPromise.all = function (promiseList = []) {
+        const total = promiseList.length
+        const result = []
+        let count = 0
+        return new MyPromise((resolve, reject) => {
+            promiseList.forEach(p => {
+                p.then(res => {
+                    result.push(res)
+                    count++
+                    if (count === total) {
+                        resolve(result)
+                    }
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        })
+    }
+
+    MyPromise.race = function (promiseList = []) {
+        let flag = false
+        return new MyPromise((resolve, reject) => {
+            promiseList.forEach(p => {
+                p.then(res => {
+                    if (!flag) {
+                        flag = true
+                        resolve(res)
+                    }
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        })
+    }
+
+    // test promise
+    // let p1 = new MyPromise((resolve, reject) => {
+    //     resolve(100)
+    //     reject('错误信息')
+    //     setTimeout(() => {
+    //         resolve(300)
+    //     }, 600)
+    // })
+    // console.log(p1)
+
+    // test promise.all
+    // const a1 = MyPromise.resolve(100)
+    // const a2 = MyPromise.resolve(200)
+    // const a3 = new MyPromise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve(300)
+    //     }, 1000)
+    // })
+    // MyPromise.all([a1, a2, a3]).then(res => {
+    //     console.log(res)
+    // })
+
+    // test promise.race
+    // const r1 = MyPromise.resolve(100)
+    // const r2 = MyPromise.resolve(200)
+    // const r3 = new MyPromise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve(300)
+    //     }, 1000)
+    // })
+    // const r4 = new MyPromise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve(400)
+    //     }, 2000)
+    // })
+    // MyPromise.race([r4, r3]).then(res => {
+    //     console.log(res)
+    // })
+</script>
+</body>
+</html>
