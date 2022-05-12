@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>33 实现一个对象的 flatten 方法
+    </title>
+</head>
+
+<body>
+    <script>
+        /*
+            题目描述:
+            const obj = {
+                a: {
+                        b: 1,
+                        c: 2,
+                        d: {e: 5}
+                    },
+                b: [1, 3, {a: 2, b: 3}],
+                c: 3
+            }
+
+            flatten(obj) 结果返回如下
+            {
+             'a.b': 1,
+             'a.c': 2,
+             'a.d.e': 5,
+             'b[0]': 1,
+             'b[1]': 3,
+             'b[2].a': 2,
+             'b[2].b': 3
+              c: 3
+            }
+        */
+        // 判断是否对象
+        function isObject(obj) {
+            return obj != null && typeof obj === 'object'
+        }
+        // function flatten(obj) {
+        //     // 如果不是对象直接返回
+        //     if (!isObject(obj)) {
+        //         return
+        //     }
+        //     // 以对象的形式返回，所以申明一个返回对象
+        //     let res = {}
+        //     // 申明递归函数
+        //     const fn = (data, key) => {
+        //         // 如果不是对象
+        //         if (!isObject(data)) {
+        //             // 直接以{key: value}的形式返回
+        //             return res[key] = data
+        //         }
+        //         // 如果是数组
+        //         if (data instanceof Array) {
+        //             // 如果是数组
+        //             data.forEach((item, index) => {
+        //                 fn(item, `${key}[${index}]`)
+        //             })
+        //         } else {
+        //             // 如果是对象
+        //             Object.keys(data).forEach(i => {
+        //                 fn(data[i], `${key}${key ? '.' : ''}${i}`)
+        //             })
+        //         }
+        //     }
+        //     // 初次调用
+        //     fn(obj, '')
+        //     // 返回结果
+        //     return res
+        // }
+
+        function flatten(obj, key) {
+            if (!isObject(obj)) {
+                return
+            }
+            const result = {}
+            const fn = (obj, key) => {
+                if (!isObject(obj)) {
+                    return result[key] = obj
+                }
+                if (obj instanceof Array) {
+                    obj.forEach((item, index) => {
+                        fn(item, `${key}[${index}]`)
+                    })
+                } else {
+                    Object.keys(obj).forEach(i => {
+                        const item = obj[i]
+                        fn(item, `${key}${key ? '.' : ''}${i}`)
+                    })
+                }
+            }
+            fn(obj, '')
+            return result
+        }
+
+        // test
+        const testObj = {
+            a: {
+                b: 1,
+                c: 2,
+                d: { e: 5 }
+            },
+            b: [1, 3, { a: 2, b: 3 }],
+            c: 3
+        }
+        const t1 = flatten(testObj)
+        console.log(t1)
+    </script>
+</body>
+
+</html>
