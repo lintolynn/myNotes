@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数柯里化</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            @parmas 
+            传入一个函数，
+            传入args参数集合
+        */
+        function curring(fn, ...args) {
+            // 获取fn的length
+            const length = fn.length
+            // 以数组的形式获取参数集合
+            let allArgs = [...args]
+            // 申明一个res函数
+            const res = (...newArgs) => {
+                // 将原有参数和新参数进行合并
+                allArgs = [...allArgs, ...newArgs]
+                // 如果如果参数结合个数 等于 函数的个数
+                if (allArgs.length === length) {
+                    // 返回当前传入函数
+                    return fn(...allArgs)
+                } else {
+                    // 返回 结果
+                    return res
+                }
+            }
+            // 返回声明的函数
+            return res
+        }
+
+        const add = (a, b, c) => a + b + c;
+        const a = curring(add, 1)
+        console.log(a(2, 3))
+    </script>
+</body>
+
+</html>
