@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原型式继承</title>
+</head>
+<body>
+<script>
+    // 利用一个空对象作为中介，将某个对象直接赋值给空对象构造函数的原型
+    function object(obj) {
+        function Fn() {}
+        Fn.prototype = obj
+        return new Fn()
+    }
+    // object()对传入其中的对象执行了一次浅复制，将构造函数F的原型直接指向传入的对象
+    const person = {
+        name: '张三',
+        colors: ['red']
+    }
+    // const copyP1 = object(person)
+    const copyP1 = Object.create(person)
+    copyP1.name = '李四'
+
+    // const copyP2 = object(person)
+    const copyP2 = Object.create(person)
+    copyP2.name = '王五'
+
+    /*
+    * 缺点：
+    * 1 原型链继承多个实例的引用类型属性指向相同，存在篡改的可能。
+    * 2 无法传递参数
+    * */
+    copyP1.colors.push('yellow')
+    copyP2.colors.push('black')
+    console.log(person) // {name: "张三", colors: ["red", "yellow", "black"]}
+</script>
+</body>
+</html>

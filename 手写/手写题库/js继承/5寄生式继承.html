@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>寄生式继承</title>
+</head>
+<body>
+<script>
+    function objectCopy(obj) {
+        function Fn() {}
+        Fn.prototype = obj
+        return new Fn()
+    }
+
+    // 核心：在原型式继承的基础上，增强对象，返回构造函数
+    function createObj(obj) {
+        // const clone = Object.create(obj)
+        const clone = objectCopy(obj)
+        clone.sayHi = function () { // 以某种方式来增强对象
+            console.log('hi')
+        }
+        return clone
+    }
+    // 函数的主要作用是为构造函数新增属性和方法，以增强函数
+    const person = {
+        name: '张三',
+        colors: ['red']
+    }
+    const clonePerson = createObj(person)
+    clonePerson.sayHi()
+
+    /*
+    * 缺点：（同原型式继承）
+    * 1 原型链继承多个实例的引用类型属性指向相同，存在篡改的可能。
+    * 2 无法传递参数
+    * */
+    clonePerson.colors.push('green')
+    console.log(person) //{"name": "张三","colors": ["red","green"]}
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组合继承</title>
+</head>
+<body>
+<script>
+    // 原型链 + 构造函数继承 就是组合继承
+    function Father (name) {
+        this.name = name
+        this.colors = ['red']
+    }
+    Father.prototype.getName = function () {
+        console.log(this.name)
+    }
+    function Child(name, age) {
+        // 3 使用构造函数继承
+        Father.call(this, name)
+        this.age = age
+    }
+    // 1 使用原型链继承
+    Child.prototype = new Father()
+    // 2 重写 Child原型链上constructor属性，执行自己的构造函数
+    Child.prototype.constructor = Child
+    Child.prototype.getAge = function () {
+        console.log(this.age)
+    }
+    // test
+    const c1 = new Child('小红', 18)
+    c1.colors.push('green')
+    console.log('c1', c1.colors) // ['red', 'green']
+    c1.getName() // 小红
+    c1.getAge() // 18
+
+    const c2 = new Child('小明', 29)
+    c2.colors.push('black')
+    console.log('c2', c2.colors) // ['red', 'black']
+    c2.getName() // 小明
+    c2.getAge() // 29
+
+    /*
+    * 缺点：
+    * 1 第一次调用Father()：给Child.prototype写入两个属性name，color。
+    * 2 第二次调用Father()：给c1写入两个属性name，color。
+    * 实例对象 c1 上的两个属性就屏蔽了其原型对象Child.prototype的两个同名属性。
+    * 所以，组合模式的缺点就是在使用子类创建实例对象时，其原型中会存在两份相同的属性/方法
+    * */
+    console.log(c1)
+</script>
+</body>
+</html>
