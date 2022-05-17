@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>7混入方式继承多个对象</title>
+</head>
+<body>
+<script>
+  function Father() {
+      console.log('我是Father')
+  }
+  Father.prototype.fatherMethods = function () {
+      console.log('Father的方法')
+  }
+  function Child() {
+      console.log('我是Child')
+  }
+  Child.prototype.childMethods = function () {
+      console.log('Child的方法')
+  }
+  function MyClass () {
+      Father.call(this)
+      Child.call(this)
+  }
+  // 继承Father的属性，这样就有了Father的方法
+  MyClass.prototype = Object.create(Father.prototype)
+  // 混合Child的属性，这样就有了Child的方法
+  Object.assign(MyClass.prototype, Child.prototype)
+  // 重新指定constructor为自己，执行自己的构造函数
+  MyClass.prototype.constructor = MyClass
+
+  MyClass.prototype.getData = function () {
+      console.log('自己的方法')
+  }
+  // test
+  const m1 = new MyClass()
+  /*
+  * MyClass 的所有实例都可用 Father、Child 的方法
+  * */
+  m1.fatherMethods()
+  m1.childMethods()
+  m1.getData()
+  console.log(m1)
+</script>
+</body>
+</html>

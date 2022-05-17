@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>寄生组合式继承</title>
+</head>
+<body>
+<script>
+    // 创建父类
+    function Father (name) {
+        this.name = name
+        this.colors = ['red']
+    }
+    Father.prototype.sayName = function () {
+        console.log(this.name)
+    }
+
+    // 创建子类
+    function Child(name, age) {
+        // 借用父类构造函数传递增强子类实例属性（支持传参和避免篡改）
+        Father.call(this, name)
+        this.age = age
+    }
+
+    function inheritPrototype(child, father) {
+        const prototype = Object.create(father.prototype) // 创建对象，创建父类原型的一个副本
+        prototype.constructor = child // 增强对象，弥补因重写原型而失去的默认的constructor 属性
+        child.prototype = prototype // 指定对象，将新创建的对象赋值给子类的原型
+    }
+
+    // 将父类原型指向子类
+    inheritPrototype(Child, Father)
+
+    // 新增子类原型属性(这里要在调用inheritPrototype方法后添加)
+    Child.prototype.sayAge = function () {
+        console.log(this.age)
+    }
+
+    // test
+    const c1 = new Child('小明', 39)
+    const c2 = new Child('小红', 26)
+    c1.sayAge() // 小明
+    c1.sayName() // 39
+    c1.colors.push('black')
+    c2.colors.push('green')
+    console.log(c1.colors) // ['red', 'black']
+    console.log(c2.colors) // ['red', 'green']
+
+    /*
+    * 避免了在SubType.prototype 上创建不必要的、多余的属性
+    * 原型链还能保持不变，还能够正常使用instanceof 和isPrototypeOf()
+    * 这是最成熟的方法，也是现在库实现的方法
+    * */
+
+</script>
+</body>
+</html>
