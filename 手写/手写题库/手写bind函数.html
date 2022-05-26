@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写bind函数</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myBind1 = function (content) {
+            // 判断调用对象是否为函数
+            if (typeof this !== 'function') {
+                throw new TypeError('not a function')
+            }
+            // 保留当前函数引用，和传入参数
+            const that = this,
+                args = [...arguments];
+            // 创建一个函数返回
+            return function Fn() {
+                // 使用 apply 来绑定函数调用
+                return that.apply(
+                    // 判断函数作为构造函数候就需要传入 当前函数的 this 给 apply 调用，
+                    // 其余情况都传入指定的上下文对象
+                    // 将两个
+                    this instanceof Fn ? this : content,
+                    [...args, ...arguments]
+                )
+            }
+        }
+
+        Function.prototype.myBind = function (content) {
+            if (typeof this !== 'function') {
+                throw new TypeError('not a function')
+            }
+            const that = this,
+                args = [...arguments];
+            return function Fn() {
+                return that.apply(
+                    this instanceof Fn ? this : content,
+                    args.concat(arguments)
+                )
+            }
+        }
+
+        // test
+        var age = 99
+        const test = {
+            age: 81,
+            getAge() {
+                return this.age
+            }
+        }
+        console.log(test.getAge()) // 81 this指向test
+        const t1 = test.getAge
+        console.log(t1()) // 99 this指向window
+        // 运用bind方法更改this指向
+        const t2 = t1.myBind(test)
+        console.log(t2()) // 81
+    </script>
+</body>
+
+</html>
