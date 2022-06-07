@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节流</title>
+  <style>
+    .contain {
+      width: 100px;
+      height: 100px;
+      background-color: #0bb20c;
+      text-align: center;
+      line-height: 100px;
+      color: wheat;
+    }
+  </style>
+</head>
+<body>
+ <div class="contain" draggable="true" id="div1">可拖拽</div>
+<script>
+  function throttle1(fn, delay = 300) {
+    let flag = false
+    return function () {
+      if (flag) {
+        return
+      }
+      flag = true
+      setTimeout(() => {
+        fn.apply(this, arguments)
+        flag = false
+      }, delay)
+    }
+  }
+
+  function throttle2(fn, delay = 300) {
+    let timer = null
+    return function () {
+      if (timer) {
+        return
+      }
+      timer = setTimeout(() => {
+        fn.apply(this, arguments)
+        timer = null
+      }, delay)
+    }
+  }
+
+  const dom = document.getElementById('div1')
+  dom.addEventListener('drag', throttle1(function (e) {
+    console.log('鼠标的位置', e.offsetX, e.offsetY)
+  }, 100))
+</script>
+</body>
+</html>

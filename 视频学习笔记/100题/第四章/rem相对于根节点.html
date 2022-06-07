@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rem相对于根节点</title>
+    <style>
+        @media only screen and (max-width: 374px) {
+            html {
+                font-size: 86px;
+            }
+        }
+        @media only screen and (min-width: 414px) {
+            html {
+                font-size: 110px;
+            }
+        }
+        .size {
+            font-size:.16rem;
+        }
+    </style>
+</head>
+<body>
+<p class="size">测试文字</p>
+</body>
+</html>
