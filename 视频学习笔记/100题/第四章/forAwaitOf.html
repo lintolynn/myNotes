@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>for await of</title>
+</head>
+<body>
+<script>
+  function createPromise(val) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(val)
+      }, 1000)
+    })
+  }
+
+  (async function () {
+      const p1 = createPromise(100)
+      const p2 = createPromise(200)
+      const p3 = createPromise(300)
+
+      const res1 = await p1
+      const res2 = await p2
+      const res3 = await p3
+
+      const list = [p1, p2, p3]
+      Promise.all(list).then(res => {
+          console.log(res) // [100, 200, 300]
+      })
+
+      // 等价于
+      // for await (let res of list) {
+      //     console.log(res) // 100 200 300
+      // }
+      for (let item of list) {
+          const res = await createPromise(item)
+          console.log(res)
+      }
+  })()
+</script>
+</body>
+</html>
