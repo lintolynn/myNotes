@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    Array.prototype.newFilter = function (fn) {
+      if (typeof fn !== 'function') {
+        throw Error('not a function')
+      }
+      // console.log(this)
+      const result = []
+      const total = this.length // this代表当前数组
+      for (let i = 0; i < total; i++) {
+        const item = this[i]
+        // // 将每一项传递到函数里
+        // if (fn(item)) {
+        //   // 为true将当前项添加到新数组
+        //   result.push(item)
+        // }
+        // 简写
+        fn(item) && result.push(item)
+      }
+      // 返回结果
+      return result
+    }
+    // test
+    const t1 = [1, 2, 3]
+    const newTest = t1.newFilter(item => item > 1)
+    console.log(newTest)
+</script>
+</body>
+</html>

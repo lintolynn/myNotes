@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写call函数</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myCall = function (content, ...args) {
+            // 如果传入的作用域为空默认指向window
+            if (!content || typeof content == null) {
+                content = window
+            }
+            // 声明唯一的key值作为内部方法名
+            let fn = Symbol()
+            // this指向调用call的函数
+            content[fn] = this
+            // 把自身作为传入的content方法调用并返回
+            return content[fn](...args)
+        }
+
+        // test
+        const obj = {
+            name: '校长',
+            objAge: this.age,
+            myFun() {
+                console.log(this.name + this.age)
+            }
+        }
+        const db = {
+            name: '德玛西亚',
+            age: 88
+        }
+        obj.objAge
+        obj.myFun()
+        obj.myFun.myCall(db)
+    </script>
+</body>
+
+</html>

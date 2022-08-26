@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    Array.prototype.newPush = function () {
+      const args = arguments
+      const total = args.length
+      for (let i = 0; i < total; i++) {
+        this[this.length] = args[i]
+      }
+      return this.length
+    }
+    // test
+    const t1 = [1]
+    const newTest = t1.newPush(2, 3, 4)
+    console.log(t1)
+    console.log(newTest)
+</script>
+</body>
+</html>
