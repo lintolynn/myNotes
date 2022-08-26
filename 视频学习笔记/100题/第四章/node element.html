@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>node element</title>
+</head>
+<body>
+
+<p id="p1">
+    <b>node</b>
+    <em>element</em>
+</p>
+
+<script>
+    const p1 = document.getElementById('p1')
+    console.log(p1.children instanceof HTMLCollection) // true
+    console.log(p1.children instanceof NodeList) // false
+
+    // class Document extends Node {}
+    // class DocumentFragment extends Node {}
+    //
+    // // 文本和注释
+    // class CharacterData extends Node {}
+    // class Comment extends CharacterData {}
+    // class Text extends CharacterData {}
+    //
+    // // elem
+    // class Element extends Node {}
+    // class HTMLElement extends Element {}
+    // class HTMLDivElement extends HTMLElement {}
+    // class HTMLInputElement extends HTMLElement {}
+    // ...
+</script>
+
+</body>
+</html>

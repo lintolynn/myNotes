@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+</head>
+
+<body>
+
+    搜索<input type="text" id="inp1">
+
+    <script>
+        function debounce(fn, delay = 200) {
+            let timer = null
+
+            return function() {
+                if (!timer) {
+                    clearTimeout(timer)
+                }
+                timer = setTimeout(() => {
+                    fn.apply(this, arguments)
+                    timer = null
+                }, delay)
+            }
+        }
+
+        const inp = document.getElementById('inp1')
+        inp.addEventListener('keyup', debounce(function() {
+            console.log('触发了')
+        }, 300))
+    </script>
+</body>
+
+</html>

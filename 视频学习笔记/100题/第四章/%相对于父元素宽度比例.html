@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>%相对于父元素宽度比例</title>
+  <style>
+    .container {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-color: red;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="box"></div>
+</div>
+
+</body>
+</html>

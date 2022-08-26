@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>offsetHeight、scrollHeight、clientHeight</title>
+</head>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #container {
+    width: 300px;
+    height: 200px;
+    padding: 20px;
+    margin: 30px;
+    border: 5px solid #ccc;
+    box-sizing: border-box;
+    overflow: auto;
+    background-color: #fff;
+  }
+  #content {
+    width: 600px;
+    height: 500px;
+    background-color: #f1f1f1;
+    display: inline-block;
+  }
+</style>
+<body>
+
+<div id="container">
+  <p id="content">第三方个梵蒂冈的广告梵蒂冈电饭锅电饭锅的非官方的鬼地方个</p>
+</div>
+
+<script>
+  const container = document.getElementById('container')
+  console.log('offsetHeight', container.offsetHeight)
+  console.log('offsetWidth', container.offsetWidth)
+  console.log('clientHeight', container.clientHeight)
+  console.log('clientWidth', container.clientWidth)
+  console.log('scrollWidth', container.scrollWidth)
+  console.log('scrollHeight', container.scrollHeight)
+  console.log('scrollTop', container.scrollTop)
+  console.log('scrollLeft', container.scrollLeft)
+</script>
+</body>
+</html>
