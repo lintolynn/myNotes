@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    // 执行顺序 微任务 > 宏任务
+  const timer1 = setTimeout(() => { // 宏任务1
+    console.log('timer1')
+    Promise.resolve().then(() => { // 微任务2
+      console.log('promise2')
+    })
+  }, 0)
+
+  Promise.resolve().then(() => { // 微任务1
+    console.log('promise1');
+    const timer2 = setTimeout(() => { // 宏任务2
+      console.log('timer2')
+    }, 0)
+  });
+
+  console.log('start');
+  // start promise1 timer1 promise2 timer2
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+  const promise1 = new Promise((resolve, reject) => {
+    console.log('promise1')
+    resolve('resolve1') // pending => resolved 保留结果
+  })
+  const promise2 = promise1.then(res => { // 放入微任务队列
+    console.log(res)
+  })
+  console.log('1', promise1);
+  console.log('2', promise2);
+  // promise1 1 Promise<resolved> 2 Promise<pending> resolve1
+</script>
+</body>
+</html>
