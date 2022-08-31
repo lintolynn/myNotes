@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function isObj(obj) {
+            return typeof obj === "object" && obj != null;
+        }
+
+        function deepClone(obj) {
+            if (!isObj(obj)) {
+                throw Error("not a object");
+            }
+            const result = Array.isArray(obj) ? [] : {};
+            Object.keys(obj).forEach((element) => {
+                if (isObj(obj[element])) {
+                    result[element] = deepClone(obj[element]);
+                } else {
+                    result[element] = obj[element];
+                }
+            });
+            return result;
+        }
+
+        const test = {
+            name: "小明",
+            like: {
+                eat: ["牛奶", "汉堡"],
+            },
+        };
+        const clone = deepClone(test);
+        clone.like.eat.push("蜂蜜");
+        console.log("before", test);
+        console.log("clone", clone);
+    </script>
+</body>
+
+</html>
