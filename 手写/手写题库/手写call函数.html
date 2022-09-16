@@ -15,11 +15,23 @@
             if (!content || typeof content == null) {
                 content = window
             }
-            // 声明唯一的key值作为内部方法名
+
+            // 1.声明唯一的key值作为内部方法名
             let fn = Symbol()
-            // this指向调用call的函数
+
+            // 2.this指向调用call的函数(让当前content对象拥有一个健名为Symbol，键值this为调用call的函数obj.fun)
             content[fn] = this
+            // 这里的this指 obj.myFun这个函数
+            // 这里的content指 db这个对象
+            // 以下这段代码相当于 db[Symbol()] = obj.myFun
+            // content = {
+            //     age: 88,
+            //     name: "德玛西亚",
+            //     Symbol(): myFun()
+            // }
+
             // 把自身作为传入的content方法调用并返回
+            // 相当于执行 obj.myFun(...args)函数，返回的this就是db这个对象
             return content[fn](...args)
         }
 

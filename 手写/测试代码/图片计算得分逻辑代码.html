@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片首屏计算</title>
+    <style>
+        body {
+            background-image: url('https://www.baidu.com/img/bd_logo1.png?where=super');
+        }
+    </style>
+</head>
+
+<body>
+    <img id="imgTest" src="https://www.baidu.com/img/bd_logo1.png?where=super" alt="">
+    <img id="imgTest" src="https://www.baidu.com/img/bd_logo1.png?where=super" alt="">
+</body>
+<script>
+    (() => {
+        const imgs = []
+        const getImageDomSrc = {
+            // 是否是来自css背景图片
+            _getImgSrcFromBgImg: function (bgImg) {
+                var imgSrc;
+                var matches = bgImg.match(/url\(.*?\)/g);//正则匹配样式背景图片
+                if (matches && matches.length) {
+                    var urlStr = matches[matches.length - 1]
+                    var innerUrl = urlStr.replace(/^url\([\'\"]?/, '').replace(/[\'\"]?\)$/, '');
+                    if (((/^http/.test(innerUrl) || /^\/\//.test(innerUrl)))) {
+                        imgSrc = innerUrl;
+                    }
+                }
+                return imgSrc;
+            },
+            // 是否是来自DOM中图片
+            getImgSrcFromDom: function (dom, imgFilter) {
+                if (!(dom.getBoundingClientRect && dom.getBoundingClientRect().top < window.innerHeight)) {
+                    return false
+                    imgFilter = [/(\.)(png|jpg|jpeg|gif|webp|ico|bmp|tiff|svg)/i]
+                    if (dom.nodeName.toUpperCase() == 'IMG') {
+                        return dom.getAttribute('src')
+                    }
+                    var computedStyle = window.getComputedStyle(dom);//获取样式集合
+                    var bgImg = computedStyle.getPropertyValue('background-image') || computedStyle.getPropertyValue('background')
+                    var tempSrc = this._getImgSrcFromBgImg(bgImg, imgFilter);//调用内部函数
+                    if (tempSrc && this._isImg(tempSrc, imgFilter)) {
+                        return tempSrc
+                    }
+
+                }
+            },
+            // 判断是否是图片
+            _isImg: function (src, imgFilter) {
+                for (let i = 0, len = imgFilter; i < len; i++) {
+                    if (imgFilter[i].test(src)) {
+                        return true
+                    }
+                }
+                return false
+            },
+            // 递归遍历图片
+            traverse(e) {
+                var _this = this, tName = e.tagName;
+                let arr = ['SCRIPT', 'STYLE', 'META', 'HEAD']
+                if (arr.includes(tName)) {
+                    return
+                }
+                var el = this.getImgSrcFromDom(e)
+                if (el && !imgs.includes(el)) imgs.push(el)
+                var len = e.children ? e.children.length : 0
+                if (len > 0) {
+                    for (let child = e.children, _len = len - 1; _len >= 0; _len--) {
+                        _this.traverse(child[_len]);
+                    }
+                }
+            }
+        }
+        // 调用图片
+        getImageDomSrc.traverse(document.body)
+        window.onload = function () {
+            var max = Math.max(...imgs.map(element => {
+                if (/^(\/\/)/.test(element)) element = 'https:' + element;
+                try {
+                    console.log(performance.getEntriesByName())
+                    return performance.getEntriesByName(element)[0].reponseEnd || 0
+                } catch (err) {
+                    return 0
+                }
+            }))
+            console.log(max);
+        }
+    })()
+</script>
+
+</html>

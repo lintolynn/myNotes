@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现apply方法</title>
+</head>
+
+<body>
+    <script>
+        // apply与call的实现一模一样，唯一的区别：传入的第二参数为数组，无需使用展开运算符
+        Function.prototype.myApply = function (content, args) {
+            // content是否有值，无值将content默认赋值为window
+            if (!content || typeof content == null) {
+                return content = window
+            }
+
+            // 申明一个变量为Symbol类型，用于设置content的健名，
+            const uniqueKey = Symbol()
+
+            // 并将调用Apply的函数(这里是this)作为键值保留下来
+            content[uniqueKey] = this
+
+            // 调用在content中保留的this函数，传入参数并返回
+            return content[uniqueKey](...args)
+
+
+        }
+
+        const t1 = {
+            name: '盲僧',
+            getName(...args) {
+                console.log(this.name + this.age + args)
+            }
+        }
+        const t2 = {
+            name: '沙皇',
+            age: 106
+        }
+        t1.getName('来自未知', ['位置打野'])
+        t1.getName.myApply(t2, ['来自艾欧尼亚', '位置法师'])
+    </script>
+</body>
+
+</html>
